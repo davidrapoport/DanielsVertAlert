@@ -1,32 +1,45 @@
-/**
- * Sample React Native App
- * https://github.com/facebook/react-native
- *
- * @format
- * @flow strict-local
- */
+import AsyncStorage from '@react-native-async-storage/async-storage';
+import React, { useEffect } from 'react';
+import { StyleSheet, View } from 'react-native';
+import { getRides } from './src/Scraper';
 
-import React from 'react';
-import {
-  SafeAreaView,
-  ScrollView,
-  StatusBar,
-  StyleSheet,
-  View,
-} from 'react-native';
+import WebIdEntryForm from './src/WebIdEntryForm';
 
-import WebIdEntryForm from './WebIdEntryForm';
+const WEB_ID_KEY = '@WEB_ID_KEY';
+
+export async function getWebId() {
+  return await AsyncStorage.getItem(WEB_ID_KEY);
+}
+
+const storeWebId = async webId => {
+  return await AsyncStorage.setItem(WEB_ID_KEY, webId);
+};
 
 const App = () => {
+  const [webId, setWebId] = React.useState();
+  useEffect(() => {
+    const loadWebId = async () => {
+      const savedWebId = getWebId();
+      if (savedWebId) {
+        setWebId(savedWebId);
+      }
+    };
+    loadWebId();
+  }, []);
+
+  const handleUpdateWebId = async updatedWebId => {
+    setWebId(updatedWebId);
+    await storeWebId(updatedWebId);
+    await getRides(updatedWebId);
+  };
+
   return (
-    <SafeAreaView>
-      <StatusBar />
-      <ScrollView contentInsetAdjustmentBehavior="automatic">
-        <View style={styles.container}>
-          <WebIdEntryForm styles={styles.inputContainer} />
-        </View>
-      </ScrollView>
-    </SafeAreaView>
+    <View style={styles.container}>
+      <WebIdEntryForm
+        savedWebId={webId}
+        handleUpdateWebId={handleUpdateWebId}
+      />
+    </View>
   );
 };
 
@@ -36,17 +49,7 @@ const styles = StyleSheet.create({
     backgroundColor: '#fff',
     alignItems: 'center',
     justifyContent: 'center',
-  },
-  input: {
-    borderColor: 'black',
-    borderWidth: 1,
-    padding: 20,
-  },
-  inputContainer: {
-    flexDirection: 'row',
-    justifyContent: 'space-between',
-    alignContent: 'center',
-    bottom: 20,
+    height: 200,
   },
 });
 
