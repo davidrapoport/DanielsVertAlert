@@ -72,12 +72,14 @@ function App() {
     setIsRefreshing(true);
 
     const rides = await scrapeRides();
-    setRideData(rides);
-    storeRideData(rideData);
-
     const refreshTime = new Date();
+    // TODO: fix bug where view refreshes before lastRefreshTime is set
+    // ie. add a spinner on dataLoad.
     setLastRefreshTime(refreshTime);
     storeLastRefreshTime(refreshTime);
+
+    setRideData(rides);
+    storeRideData(rideData);
 
     setIsRefreshing(false);
   };
