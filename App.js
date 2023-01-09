@@ -10,6 +10,7 @@ import {
   storeLastRefreshTime,
   getRideData,
   storeRideData,
+  clearAllStoredData,
 } from './src/Storage';
 
 import WebIdEntryForm from './src/WebIdEntryForm';
@@ -56,6 +57,13 @@ function App() {
   const handleUpdateWebId = async updatedWebId => {
     setWebId(updatedWebId);
     await storeWebId(updatedWebId);
+    // This happens when the user clears their WebId.
+    if (!updatedWebId) {
+      setRideData(null);
+      setLastRefreshTime(null);
+      await clearAllStoredData();
+      return;
+    }
     // Refresh the data with a new webId
     await handleRefresh();
   };
