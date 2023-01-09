@@ -1,6 +1,6 @@
 const DEBUG_WEB_ID = "L98110TQ-GJE-UP1"
 
-export async function getRides(webId) {
+export async function scrapeRides(webId) {
     const authCookies = await getAuthCookies();
     const headers = Object.assign({}, authCookies);
     headers['Content-Type'] = 'application/json';
@@ -88,5 +88,31 @@ const getRideData = async (
     });
     const data = await ridesResponse.json();
     console.log(data);
-    return data;
+    return parseRides(data);
+};
+
+
+const parseRides = ridesJson => {
+    const rides = ridesJson.rides;
+    const parsed = [];
+    rides.forEach(daysRides => {
+        if (daysRides.length === 0) {
+            return;
+        }
+
+        parsed.push({
+            date: daysRides[0].SZDATEOFRIDE,
+            totalVert: daysRides[0].total,
+            rides: daysRides.map(ride => {
+                return {
+                    date: ride.SZDATEOFRIDE,
+                    vert: ride.NVERTICALFEET,
+                    time: ride.SZTIMEOFRIDE,
+                    lift: ride.SZPOENAME,
+                    timestamp: ride.SZDATEOFRIDE + 'T' + ride.SZTIMEOFRIDE,
+                };
+            })
+        });
+    });
+    return parsed;
 };

@@ -9,7 +9,7 @@ const getCurrentDateInFormat = () => {
 
 
 // Format of ridesData [{date, totalVert, rides[]}]
-const RidesView = ({ ridesData }) => {
+const RidesView = ({ ridesData, lastRefreshTime, refreshControl }) => {
     // Sort in descending order.
     ridesData.sort((a, b) => {
         if (b.date < a.date) {
@@ -22,13 +22,14 @@ const RidesView = ({ ridesData }) => {
     return (
         <View style={styles.container}>
             <Text>
-                Historic Ride Data
+                Historic Ride Data, Last Refreshed: {lastRefreshTime.toLocaleString()}
             </Text>
             <SectionList
                 sections={sections}
                 renderItem={({ item }) => <RideView style={styles.item} ride={item} />}
                 renderSectionHeader={({ section }) => <DayHeaderView style={styles.sectionHeader} rides={section} />}
                 keyExtractor={(item) => `basicListEntry-${item.timestamp}`}
+                refreshControl={refreshControl}
             />
         </View>
     )

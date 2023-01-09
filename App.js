@@ -1,75 +1,79 @@
-import AsyncStorage from '@react-native-async-storage/async-storage';
 import React, { useEffect } from 'react';
-import { StyleSheet, View } from 'react-native';
+import { StyleSheet, View, RefreshControl } from 'react-native';
 import RidesView from './src/RidesView';
-import { getRides } from './src/Scraper';
+import { scrapeRides } from './src/Scraper';
+import {
+  getWebId,
+  storeWebId,
+  getLastRefreshTime,
+  storeLastRefreshTime,
+  getRideData,
+  storeRideData,
+} from './src/Storage';
 
 import WebIdEntryForm from './src/WebIdEntryForm';
-
-const WEB_ID_KEY = '@WEB_ID_KEY';
-
-export async function getWebId() {
-  return await AsyncStorage.getItem(WEB_ID_KEY);
-}
-
-const storeWebId = async webId => {
-  return await AsyncStorage.setItem(WEB_ID_KEY, webId);
-};
-
-const parseRides = ridesJson => {
-  const rides = ridesJson.rides;
-  const parsed = [];
-  rides.forEach(daysRides => {
-    if (daysRides.length === 0) {
-      return;
-    }
-
-    parsed.push({
-      date: daysRides[0].SZDATEOFRIDE,
-      totalVert: daysRides[0].total,
-      rides: daysRides.map(ride => {
-        return {
-          date: ride.SZDATEOFRIDE,
-          vert: ride.NVERTICALFEET,
-          time: ride.SZTIMEOFRIDE,
-          lift: ride.SZPOENAME,
-          timestamp: ride.SZDATEOFRIDE + 'T' + ride.SZTIMEOFRIDE,
-        };
-      })
-    });
-  });
-  return parsed;
-};
 
 function App() {
   const [webId, setWebId] = React.useState();
   const [rideData, setRideData] = React.useState();
+  const [lastRefreshTime, setLastRefreshTime] = React.useState();
+  const [isRefreshing, setIsRefreshing] = React.useState(false);
   useEffect(() => {
-    const loadWebId = async () => {
-      const savedWebId = getWebId();
+    const loadSavedData = async () => {
+      const savedWebId = await getWebId();
+      const savedRefreshTime = await getLastRefreshTime();
+      const savedRideData = await getRideData();
       if (savedWebId) {
         setWebId(savedWebId);
       }
+      if (savedRefreshTime) {
+        setLastRefreshTime(savedRefreshTime);
+      }
+      if (savedRideData) {
+        setRideData(savedRideData);
+      }
     };
-    loadWebId();
+    loadSavedData();
   }, []);
 
-  const handleUpdateWebId = async (updatedWebId) => {
+  const handleUpdateWebId = async updatedWebId => {
     setWebId(updatedWebId);
     await storeWebId(updatedWebId);
-    const rides = await getRides(updatedWebId);
-    setRideData(parseRides(rides));
+    // Refresh the data with a new webId
+    await handleRefresh();
   };
 
+  const handleRefresh = async () => {
+    setIsRefreshing(true);
 
-  console.log(rideData);
+    const rides = await scrapeRides();
+    setRideData(rides);
+    storeRideData(rideData);
+
+    const refreshTime = new Date();
+    setLastRefreshTime(refreshTime);
+    storeLastRefreshTime(refreshTime);
+
+    setIsRefreshing(false);
+  };
+
+  const refreshControl = (
+    <RefreshControl refreshing={isRefreshing} onRefresh={handleRefresh} />
+  );
 
   return (
     <View style={styles.container}>
       <WebIdEntryForm
         savedWebId={webId}
-        handleUpdateWebId={handleUpdateWebId} />
-      {rideData && <RidesView ridesData={rideData} />}
+        handleUpdateWebId={handleUpdateWebId}
+      />
+      {rideData && (
+        <RidesView
+          ridesData={rideData}
+          lastRefreshTime={lastRefreshTime}
+          refreshControl={refreshControl}
+        />
+      )}
     </View>
   );
 }
