@@ -2,7 +2,7 @@ import AsyncStorage from '@react-native-async-storage/async-storage';
 
 const WEB_ID_KEY = '@WEB_ID_KEY';
 const RIDE_DATA_KEY = '@RIDE_DATA_KEY';
-const LAST_REFRESH_KEY = '@LAST_REFRESH_KEY'
+const LAST_REFRESH_KEY = '@LAST_REFRESH_KEY';
 
 export async function getWebId() {
     return await AsyncStorage.getItem(WEB_ID_KEY);

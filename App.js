@@ -1,7 +1,8 @@
-import React, { useEffect } from 'react';
+import React, { useCallback, useEffect } from 'react';
 import { StyleSheet, View, RefreshControl } from 'react-native';
 import RidesView from './src/RidesView';
 import { scrapeRides } from './src/Scraper';
+import { shouldScrapeRides } from './src/ScraperController';
 import {
   getWebId,
   storeWebId,
@@ -18,6 +19,8 @@ function App() {
   const [rideData, setRideData] = React.useState();
   const [lastRefreshTime, setLastRefreshTime] = React.useState();
   const [isRefreshing, setIsRefreshing] = React.useState(false);
+
+  // Load saved data from AsyncStorage onComponentDidMount.
   useEffect(() => {
     const loadSavedData = async () => {
       const savedWebId = await getWebId();
@@ -35,6 +38,22 @@ function App() {
     };
     loadSavedData();
   }, []);
+
+  // Set a timer to poll data every 5 minutes when the app 
+  // is in the foreground. Headless calls will be used for 
+  // background sync.
+  const pollRideData = useCallback(async () => {
+    // Should scrape rides ensures that refreshes don't happen
+    // more than once every 5 minutes.
+    console.log("Trying to poll now" + new Date())
+    if (await shouldScrapeRides()) {
+      console.log("Successfully polling " + new Date())
+      await handleRefresh();
+    }
+  });
+  useEffect(() => {
+    setInterval(pollRideData, 60 * 1000)
+  }, [pollRideData]);
 
   const handleUpdateWebId = async updatedWebId => {
     setWebId(updatedWebId);
