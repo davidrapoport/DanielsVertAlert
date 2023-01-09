@@ -1,6 +1,6 @@
 import React, { useCallback, useEffect } from 'react';
 import { StyleSheet, View, RefreshControl } from 'react-native';
-import RidesView from './src/RidesView';
+import HistoricRidesView from './src/HistoricRidesView';
 import { scrapeRides } from './src/Scraper';
 import { shouldScrapeRides } from './src/ScraperController';
 import {
@@ -45,9 +45,7 @@ function App() {
   const pollRideData = useCallback(async () => {
     // Should scrape rides ensures that refreshes don't happen
     // more than once every 5 minutes.
-    console.log("Trying to poll now" + new Date())
     if (await shouldScrapeRides()) {
-      console.log("Successfully polling " + new Date())
       await handleRefresh();
     }
   });
@@ -87,7 +85,7 @@ function App() {
         handleUpdateWebId={handleUpdateWebId}
       />
       {rideData && (
-        <RidesView
+        <HistoricRidesView
           ridesData={rideData}
           lastRefreshTime={lastRefreshTime}
           refreshControl={refreshControl}
