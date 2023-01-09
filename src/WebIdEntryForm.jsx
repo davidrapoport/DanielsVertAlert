@@ -4,7 +4,6 @@ import { useState } from "react";
 
 const WebIdEntryForm = ({ savedWebId, handleUpdateWebId }) => {
     const [webId, setWebId] = useState("")
-
     const clearWebId = () => {
         setWebId("");
         handleUpdateWebId("");

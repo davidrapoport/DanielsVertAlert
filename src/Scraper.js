@@ -88,4 +88,5 @@ const getRideData = async (
     });
     const data = await ridesResponse.json();
     console.log(data);
+    return data;
 };
