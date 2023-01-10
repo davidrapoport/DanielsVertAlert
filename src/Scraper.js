@@ -6,7 +6,7 @@ export async function scrapeRides(webId) {
     headers['Content-Type'] = 'application/json';
     headers.Accept = 'application/json';
     headers['X-Requested-With'] = 'XMLHttpRequest';
-    const metadataResponse = await getUserMetadata(headers, DEBUG_WEB_ID);
+    const metadataResponse = await getUserMetadata(headers, webId);
     const metadataResponseBody = await metadataResponse.json();
     return await getRideData(metadataResponseBody, metadataResponse.headers, headers);
 }
@@ -15,10 +15,10 @@ const getAuthCookies = async () => {
     const url = 'https://shop.alta.com/my-ski-history';
     const headersResponse = await fetch(url);
     if (headersResponse.status !== 200) {
-        console.error(
-            'Received status code {headersResponse.status} when fetching XSRF cookies',
-        );
-        return;
+        throw new Error(`Request to alta.com failed with error 
+                        code ${headersResponse.status}
+                        Maybe the server is down or you aren't connected
+                        to the internet?`);
     }
     const cookies = getCookiesFromResponseHeader(headersResponse.headers);
     const responseBody = await headersResponse.text();
@@ -72,6 +72,7 @@ const getRideData = async (
     authResponseHeaders,
     requestHeaders,
 ) => {
+    // TODO error handling of malformed WTP.
     const transactions = authResponseBody.transactions[0];
     const rideRequestBody = {
         nposno: transactions.NPOSNO,

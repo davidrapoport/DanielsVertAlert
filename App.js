@@ -1,5 +1,6 @@
-import React, { useCallback, useEffect } from 'react';
-import { StyleSheet, View, RefreshControl } from 'react-native';
+import React, { useCallback, useEffect, useRef } from 'react';
+import { AppRegistry } from 'react-native';
+import { StyleSheet, View, RefreshControl, ActivityIndicator } from 'react-native';
 import HistoricRidesView from './src/HistoricRidesView';
 import { scrapeRides } from './src/Scraper';
 import { shouldScrapeRides } from './src/ScraperController';
@@ -49,10 +50,26 @@ function App() {
     if (await shouldScrapeRides()) {
       await handleRefresh();
     }
-  });
-  useEffect(() => {
-    setInterval(pollRideData, 60 * 1000)
-  }, [pollRideData]);
+  }, [handleRefresh]);
+  const subscribeToScraping = () => {
+    const timeout = useRef();
+    const mountedRef = useRef(false);
+    const run = useCallback(async () => {
+      await pollRideData();
+      if (mountedRef.current) {
+        timeout.current = window.setTimeout(run, 60 * 1000);
+      }
+    }, []);
+    useEffect(() => {
+      mountedRef.current = true;
+      run();
+      return () => {
+        mountedRef.current = false;
+        window.clearTimeout(timeout.current);
+      };
+    }, [run]);
+  };
+  subscribeToScraping();
 
   const handleUpdateWebId = async updatedWebId => {
     setWebId(updatedWebId);
@@ -68,25 +85,35 @@ function App() {
     await handleRefresh();
   };
 
-  const handleRefresh = async () => {
+  const handleRefresh = useCallback(async () => {
     setIsRefreshing(true);
 
-    const rides = await scrapeRides();
+    // TODO fix race condition causing you to have to read this from storage
+    // instead of ReactState.
+    const storedWebId = await getWebId();
+    const rides = await scrapeRides(storedWebId);
     const refreshTime = new Date();
-    // TODO: fix bug where view refreshes before lastRefreshTime is set
-    // ie. add a spinner on dataLoad.
     setLastRefreshTime(refreshTime);
-    storeLastRefreshTime(refreshTime);
+    await storeLastRefreshTime(refreshTime);
 
     setRideData(rides);
-    storeRideData(rideData);
+    await storeRideData(rides);
+
 
     setIsRefreshing(false);
-  };
+  }, []);
 
   const refreshControl = (
     <RefreshControl refreshing={isRefreshing} onRefresh={handleRefresh} />
   );
+
+  if (isRefreshing && (!lastRefreshTime || !rideData)) {
+    return (
+      <View style={styles.container}>
+        <ActivityIndicator size="large" />
+      </View>
+    );
+  }
 
   return (
     <View style={styles.container}>
