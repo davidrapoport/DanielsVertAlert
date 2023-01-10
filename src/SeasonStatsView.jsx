@@ -42,7 +42,8 @@ const SeasonStatsView = ({ ridesData, refreshControl }) => {
     })
 
     const seasonVert = ridesData.reduce((acc, { totalVert }) => { return acc + totalVert }, 0);
-
+    const numMidloads = 'Collins Angle' in numRidesPerLift ? numRidesPerLift['Collins Angle'] : 0;
+    let midloadPlural = numMidloads === 1 ? 'time' : 'times';
     return (
         <ScrollView style={styles.statsViewContainer} refreshControl={refreshControl}>
             <Text style={styles.h1}>
@@ -51,10 +52,12 @@ const SeasonStatsView = ({ ridesData, refreshControl }) => {
             <Text style={styles.h2}>
                 At a glance
             </Text>
-            <Text>
+            <Text style={styles.summaryText}>
                 You've skied {flattenedRides.length} laps in{' '}
                 {ridesData.length} days for a total of{' '}
                 {seasonVert.toLocaleString()} vertical feet.
+                But most importantly, you've midloaded
+                {` ${numMidloads} ${midloadPlural}`}
             </Text>
             <RideStatsPieChart numRidesPerLift={numRidesPerLift} />
             <LiftBreakdownTable numRidesPerLift={numRidesPerLift} />
@@ -159,6 +162,9 @@ const styles = StyleSheet.create({
         fontSize: 28,
         paddingBottom: 2,
         fontWeight: 'bold',
+    },
+    summaryText: {
+        fontSize: 18,
     },
     labels: {
         paddingTop: 8,
