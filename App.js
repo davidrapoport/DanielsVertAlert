@@ -1,7 +1,5 @@
 import React, { useCallback, useEffect, useRef } from 'react';
-import { StyleSheet, View, RefreshControl, ActivityIndicator, ScrollView } from 'react-native';
-import HistoricRidesView from './src/HistoricRidesView';
-import SeasonStatsView from './src/SeasonStatsView';
+import { StyleSheet, View, RefreshControl, ActivityIndicator } from 'react-native';
 import { scrapeRides } from './src/Scraper';
 import { shouldScrapeRides } from './src/ScraperController';
 import {
@@ -13,18 +11,19 @@ import {
   storeRideData,
   clearAllStoredData,
 } from './src/Storage';
-
-import WebIdEntryForm from './src/WebIdEntryForm';
+import TabNavigator from './src/TabNavigator';
 
 function App() {
   const [webId, setWebId] = React.useState();
   const [rideData, setRideData] = React.useState();
   const [lastRefreshTime, setLastRefreshTime] = React.useState();
   const [isRefreshing, setIsRefreshing] = React.useState(false);
+  const [isLoading, setIsLoading] = React.useState(true);
 
   // Load saved data from AsyncStorage onComponentDidMount.
   useEffect(() => {
     const loadSavedData = async () => {
+      setIsLoading(true);
       const savedWebId = await getWebId();
       const savedRefreshTime = await getLastRefreshTime();
       const savedRideData = await getRideData();
@@ -37,6 +36,7 @@ function App() {
       if (savedRideData) {
         setRideData(savedRideData);
       }
+      setIsLoading(false);
     };
     loadSavedData();
   }, []);
@@ -106,7 +106,7 @@ function App() {
     <RefreshControl refreshing={isRefreshing} onRefresh={handleRefresh} />
   );
 
-  if (isRefreshing && (!lastRefreshTime || !rideData)) {
+  if ((isRefreshing && (!lastRefreshTime || !rideData)) || isLoading) {
     return (
       <View style={styles.container}>
         <ActivityIndicator size="large" />
@@ -114,22 +114,18 @@ function App() {
     );
   }
 
+  // TODO what does a season pass with no rides look like from the API?
+
+  //TODO is handling all the state/storage here and then sending every single
+  // prop that a child component will ever need over to the TabNavigator
+  // a 'good' solution? Probably not.
   return (
-    <View style={styles.container}>
-      <WebIdEntryForm
-        savedWebId={webId}
-        handleUpdateWebId={handleUpdateWebId}
-      />
-      {rideData && (
-        <ScrollView refreshControl={refreshControl}>
-          <HistoricRidesView
-            ridesData={rideData}
-            lastRefreshTime={lastRefreshTime}
-            onlyShowTodays={true} />
-          <SeasonStatsView ridesData={rideData} />
-        </ScrollView>
-      )}
-    </View>
+    <TabNavigator
+      rideData={rideData}
+      refreshControl={refreshControl}
+      savedWebId={webId}
+      handleUpdateWebId={handleUpdateWebId}
+      lastRefreshTime={lastRefreshTime} />
   );
 }
 
