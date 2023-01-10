@@ -1,5 +1,5 @@
 import React, { useCallback, useEffect, useRef } from 'react';
-import { StyleSheet, View, RefreshControl, ActivityIndicator } from 'react-native';
+import { StyleSheet, View, RefreshControl, ActivityIndicator, ScrollView } from 'react-native';
 import HistoricRidesView from './src/HistoricRidesView';
 import SeasonStatsView from './src/SeasonStatsView';
 import { scrapeRides } from './src/Scraper';
@@ -121,11 +121,13 @@ function App() {
         handleUpdateWebId={handleUpdateWebId}
       />
       {rideData && (
-        <SeasonStatsView
-          ridesData={rideData}
-          lastRefreshTime={lastRefreshTime}
-          refreshControl={refreshControl}
-        />
+        <ScrollView refreshControl={refreshControl}>
+          <HistoricRidesView
+            ridesData={rideData}
+            lastRefreshTime={lastRefreshTime}
+            onlyShowTodays={true} />
+          <SeasonStatsView ridesData={rideData} />
+        </ScrollView>
       )}
     </View>
   );

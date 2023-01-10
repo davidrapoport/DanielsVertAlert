@@ -9,32 +9,51 @@ const getCurrentDateInFormat = () => {
 
 
 // Format of ridesData [{date, totalVert, rides[]}]
-const HistoricRidesView = ({ ridesData, lastRefreshTime, refreshControl }) => {
+const HistoricRidesView = ({ ridesData, lastRefreshTime, onlyShowTodays }) => {
     // Sort in descending order.
     ridesData.sort((a, b) => {
         if (b.date < a.date) {
             return -1;
+        } if (a.date < b.date) {
+            return 1;
         }
     })
+    let ridesDataToRender = ridesData;
+    if (onlyShowTodays) {
+        ridesDataToRender = [ridesData[0]];
+        if (ridesData[0].date !== getCurrentDateInFormat()) {
+            return (
+                <View style={styles.container}>
+                    <Text style={styles.sectionHeader}>
+                        No rides yet today... What, are you interlodged?
+                        {' '} Or do you just like getting paid $600 a month
+                        {' '} to eat Andrew's "lasagna"?
+                    </Text>
+                </View>
+            )
+        }
+    }
     const sections = [];
-    ridesData.forEach(rides => {
+    ridesDataToRender.forEach(rides => {
         const laps = rides.rides.length > 1 ? 'laps' : 'lap';
         sections.push({
             title: `${rides.date}: You skied ${rides.rides.length} ${laps} for ${rides.totalVert} feet`, data: rides.rides
         })
     })
-    const todaysDate = getCurrentDateInFormat();
+    let headerText = `Historic Ride Data, Last Refreshed: ${lastRefreshTime.toLocaleString()}`
+    if (onlyShowTodays) {
+        headerText = `Todays Ride Data, Last Refreshed: ${lastRefreshTime.toLocaleString()}`
+    }
     return (
         <View style={styles.container}>
             <Text style={styles.h1}>
-                Historic Ride Data, Last Refreshed: {lastRefreshTime.toLocaleString()}
+                {headerText}
             </Text>
             <SectionList
                 sections={sections}
                 renderItem={({ item }) => <RideView ride={item} />}
                 renderSectionHeader={({ section }) => <DayHeaderView rides={section} />}
                 keyExtractor={(item) => `basicListEntry-${item.timestamp}`}
-                refreshControl={refreshControl}
             />
         </View>
     )
