@@ -1,7 +1,7 @@
 import React, { useCallback, useEffect, useRef } from 'react';
-import { AppRegistry } from 'react-native';
 import { StyleSheet, View, RefreshControl, ActivityIndicator } from 'react-native';
 import HistoricRidesView from './src/HistoricRidesView';
+import SeasonStatsView from './src/SeasonStatsView';
 import { scrapeRides } from './src/Scraper';
 import { shouldScrapeRides } from './src/ScraperController';
 import {
@@ -51,7 +51,7 @@ function App() {
       await handleRefresh();
     }
   }, [handleRefresh]);
-  const subscribeToScraping = () => {
+  const useSubscribeToScraping = () => {
     const timeout = useRef();
     const mountedRef = useRef(false);
     const run = useCallback(async () => {
@@ -69,7 +69,7 @@ function App() {
       };
     }, [run]);
   };
-  subscribeToScraping();
+  useSubscribeToScraping();
 
   const handleUpdateWebId = async updatedWebId => {
     setWebId(updatedWebId);
@@ -99,7 +99,6 @@ function App() {
     setRideData(rides);
     await storeRideData(rides);
 
-
     setIsRefreshing(false);
   }, []);
 
@@ -122,7 +121,7 @@ function App() {
         handleUpdateWebId={handleUpdateWebId}
       />
       {rideData && (
-        <HistoricRidesView
+        <SeasonStatsView
           ridesData={rideData}
           lastRefreshTime={lastRefreshTime}
           refreshControl={refreshControl}
