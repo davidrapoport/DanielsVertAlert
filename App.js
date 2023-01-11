@@ -11,7 +11,8 @@ import {
   storeRideData,
   clearAllStoredData,
 } from './src/Storage';
-import TabNavigator from './src/TabNavigator';
+import TabNavigator from './src/components/TabNavigator';
+import WebIdEntryForm from './src/components/WebIdEntryForm';
 
 function App() {
   const [webId, setWebId] = React.useState();
@@ -114,11 +115,17 @@ function App() {
     );
   }
 
+  if (!webId) {
+    return (
+      <View style={styles.container}>
+        <WebIdEntryForm savedWebId={webId} handleUpdateWebId={handleUpdateWebId} />
+      </View>
+    )
+  }
+
   // TODO what does a season pass with no rides look like from the API?
 
-  //TODO is handling all the state/storage here and then sending every single
-  // prop that a child component will ever need over to the TabNavigator
-  // a 'good' solution? Probably not.
+  //TODO migrate to React.Context
   return (
     <TabNavigator
       rideData={rideData}

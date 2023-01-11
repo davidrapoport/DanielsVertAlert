@@ -14,7 +14,7 @@ function TabNavigator({
     lastRefreshTime }) {
     return (
         <NavigationContainer>
-            <Tab.Navigator initialRouteName='DailyStats'>
+            <Tab.Navigator initialRouteName='Daily Stats'>
                 <Tab.Screen name="Settings">
                     {(props) => {
                         return <WebIdEntryForm {...props}
@@ -22,23 +22,29 @@ function TabNavigator({
                             handleUpdateWebId={handleUpdateWebId} />;
                     }}
                 </Tab.Screen>
-                <Tab.Screen name="DailyStats" >
+                <Tab.Screen name="Daily Stats" >
                     {(props) => {
                         return <HistoricRidesView {...props}
                             ridesData={rideData}
                             lastRefreshTime={lastRefreshTime}
-                            onlyShowTodays={true} />;
+                            onlyShowTodays={true}
+                            refreshControl={refreshControl} />;
                     }}
                 </Tab.Screen>
-                <Tab.Screen name="SeasonStats" >
-                    {(props) => <SeasonStatsView {...props} ridesData={rideData} />}
+                <Tab.Screen name="Season Stats" >
+                    {(props) => {
+                        return <SeasonStatsView {...props}
+                            ridesData={rideData}
+                            refreshControl={refreshControl} />
+                    }}
                 </Tab.Screen>
                 <Tab.Screen name="See Rides" >
                     {(props) => {
                         return <HistoricRidesView {...props}
                             ridesData={rideData}
                             lastRefreshTime={lastRefreshTime}
-                            onlyShowTodays={false} />;
+                            onlyShowTodays={false}
+                            refreshControl={refreshControl} />;
                     }}
                 </Tab.Screen>
             </Tab.Navigator>

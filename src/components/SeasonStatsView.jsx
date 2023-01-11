@@ -21,7 +21,7 @@ const getColorFromLift = name => {
 }
 
 // Format of ridesData [{date, totalVert, rides[]}]
-const SeasonStatsView = ({ ridesData }) => {
+const SeasonStatsView = ({ ridesData, refreshControl }) => {
     // Sort in ascending order.
     ridesData.sort((a, b) => {
         if (a.date < b.date) {
@@ -45,7 +45,7 @@ const SeasonStatsView = ({ ridesData }) => {
     const numMidloads = 'Collins Angle' in numRidesPerLift ? numRidesPerLift['Collins Angle'] : 0;
     let midloadPlural = numMidloads === 1 ? 'time' : 'times';
     return (
-        <ScrollView style={styles.statsViewContainer}>
+        <ScrollView style={styles.statsViewContainer} refreshControl={refreshControl}>
             <Text style={styles.h1}>
                 Season Stats
             </Text>

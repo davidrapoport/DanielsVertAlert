@@ -9,7 +9,7 @@ const getCurrentDateInFormat = () => {
 
 
 // Format of ridesData [{date, totalVert, rides[]}]
-const HistoricRidesView = ({ ridesData, lastRefreshTime, onlyShowTodays }) => {
+const HistoricRidesView = ({ ridesData, lastRefreshTime, onlyShowTodays, refreshControl }) => {
     // Sort in descending order.
     ridesData.sort((a, b) => {
         if (b.date < a.date) {
@@ -40,14 +40,17 @@ const HistoricRidesView = ({ ridesData, lastRefreshTime, onlyShowTodays }) => {
             title: `${rides.date}: You skied ${rides.rides.length} ${laps} for ${rides.totalVert} feet`, data: rides.rides
         })
     })
-    let headerText = `Historic Ride Data, Last Refreshed: ${lastRefreshTime.toLocaleString()}`
+    let headerText = `Historic Ride Data`
     if (onlyShowTodays) {
-        headerText = `Todays Ride Data, Last Refreshed: ${lastRefreshTime.toLocaleString()}`
+        headerText = `Todays Ride Data`
     }
     return (
-        <View style={styles.container}>
+        <View style={styles.container} refreshControl={refreshControl}>
             <Text style={styles.h1}>
                 {headerText}
+            </Text>
+            <Text style={styles.h3}>
+                Last Refreshed: {lastRefreshTime.toLocaleString()}
             </Text>
             <SectionList
                 sections={sections}
@@ -87,12 +90,15 @@ const RideView = ({ ride }) => {
 const styles = StyleSheet.create({
     container: {
         flex: 1,
-        paddingTop: 22
+        paddingTop: 22,
     },
     h1: {
         fontSize: 36,
         paddingBottom: 2,
         fontWeight: 'bold',
+    },
+    h3: {
+        fontSize: 22,
     },
     sectionHeader: {
         paddingTop: 12,
