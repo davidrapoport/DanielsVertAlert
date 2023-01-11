@@ -4,6 +4,8 @@ import HistoricRidesView from './HistoricRidesView';
 import SeasonStatsView from './SeasonStatsView';
 import WebIdEntryForm from './WebIdEntryForm';
 
+import Ionicons from 'react-native-vector-icons/Ionicons';
+
 const Tab = createBottomTabNavigator();
 
 function TabNavigator({
@@ -14,7 +16,28 @@ function TabNavigator({
     lastRefreshTime }) {
     return (
         <NavigationContainer>
-            <Tab.Navigator initialRouteName='Daily Stats'>
+            <Tab.Navigator initialRouteName='Daily Stats'
+                screenOptions={({ route }) => ({
+                    tabBarIcon: ({ focused, color, size }) => {
+                        let iconName;
+                        if (route.name === 'Daily Stats') {
+                            iconName = 'snow-outline';
+                        } else if (route.name === 'Settings') {
+                            iconName = 'settings-outline';
+                        } else if (route.name === 'Season Stats') {
+                            iconName = 'today-outline';
+                        } else if (route.name === 'All Rides') {
+                            iconName = 'trending-up-outline';
+                        }
+                        return <Ionicons name={iconName} size={size} color={color} />;
+                    },
+                    tabBarActiveTintColor: 'tomato',
+                    tabBarInactiveTintColor: 'gray',
+                    headerStyle: {
+                        backgroundColor: '#f4511e',
+                    },
+                    headerTintColor: '#fff',
+                })}>
                 <Tab.Screen name="Settings">
                     {(props) => {
                         return <WebIdEntryForm {...props}
@@ -38,7 +61,7 @@ function TabNavigator({
                             refreshControl={refreshControl} />
                     }}
                 </Tab.Screen>
-                <Tab.Screen name="See Rides" >
+                <Tab.Screen name="All Rides" >
                     {(props) => {
                         return <HistoricRidesView {...props}
                             ridesData={rideData}

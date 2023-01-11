@@ -1,4 +1,4 @@
-import { Button, TextInput, View, Text, StyleSheet } from "react-native";
+import { Button, TextInput, View, Text, StyleSheet, Image } from "react-native";
 
 import { useState } from "react";
 
@@ -16,7 +16,8 @@ const WebIdEntryForm = ({ savedWebId, handleUpdateWebId }) => {
     if (savedWebId && savedWebId.length > 0) {
         const title = "Reset Web Id? Current ID is " + savedWebId
         return (
-            <View>
+            <View style={styles.inputContainer}>
+                <Image source={require('../img/Alta_logo_dropshadow.jpg')} />
                 <Button onPress={clearWebId} title={title}></Button>
             </View>
         )
@@ -24,10 +25,13 @@ const WebIdEntryForm = ({ savedWebId, handleUpdateWebId }) => {
 
     return (
         <View style={styles.inputContainer}>
-            <Text>Enter your Alta web Id</Text>
+            <Image source={require('../img/Alta_logo_dropshadow.jpg')} />
+            <Text style={styles.h3}>Enter your Alta Web Id to get started</Text>
+            <Text>Your Web Id can be found at the bottom of your season pass</Text>
+            <Text>(make sure to put in the dashes too)</Text>
             <TextInput style={styles.input} defaultValue={webId} onChangeText={setWebId}>
             </TextInput>
-            <Button onPress={onClickUpdateWebId} title="Update Web ID"></Button>
+            <Button onPress={onClickUpdateWebId} title="Check my Vert"></Button>
         </View>
     );
 }
@@ -44,6 +48,11 @@ const styles = StyleSheet.create({
         alignContent: 'center',
         bottom: 40,
         top: 20,
+        marginLeft: 12,
+        marginRight: 12,
+    },
+    h3: {
+        fontSize: 22,
     },
 })
 
