@@ -34,7 +34,7 @@ const HistoricRidesView = ({
         ridesDataToRender = [ridesData[0]];
         if (ridesData[0].date !== getCurrentDateInFormat()) {
             return (
-                <View style={styles.container}>
+                <View style={styles.container} refreshControl={refreshControl}>
                     <Text style={styles.sectionHeader}>
                         No rides yet today... What, are you interlodged?
                         {' '} Or do you just like getting paid $600 a month
