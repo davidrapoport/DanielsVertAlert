@@ -38,13 +38,6 @@ function TabNavigator({
                     },
                     headerTintColor: '#fff',
                 })}>
-                <Tab.Screen name="Settings">
-                    {(props) => {
-                        return <WebIdEntryForm {...props}
-                            savedWebId={savedWebId}
-                            handleUpdateWebId={handleUpdateWebId} />;
-                    }}
-                </Tab.Screen>
                 <Tab.Screen name="Daily Stats" >
                     {(props) => {
                         return <HistoricRidesView {...props}
@@ -68,6 +61,13 @@ function TabNavigator({
                             lastRefreshTime={lastRefreshTime}
                             onlyShowTodays={false}
                             refreshControl={refreshControl} />;
+                    }}
+                </Tab.Screen>
+                <Tab.Screen name="Settings">
+                    {(props) => {
+                        return <WebIdEntryForm {...props}
+                            savedWebId={savedWebId}
+                            handleUpdateWebId={handleUpdateWebId} />;
                     }}
                 </Tab.Screen>
             </Tab.Navigator>
