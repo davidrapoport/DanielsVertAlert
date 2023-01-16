@@ -42,35 +42,24 @@ function App() {
     loadSavedData();
   }, []);
 
-  // Set a timer to poll data every 5 minutes when the app 
-  // is in the foreground. Headless calls will be used for 
-  // background sync.
-  const pollRideData = useCallback(async () => {
-    // Should scrape rides ensures that refreshes don't happen
-    // more than once every 5 minutes.
-    if (await shouldScrapeRides()) {
-      await handleRefresh();
-    }
-  }, [handleRefresh]);
-  const useSubscribeToScraping = () => {
-    const timeout = useRef();
-    const mountedRef = useRef(false);
-    const run = useCallback(async () => {
-      await pollRideData();
-      if (mountedRef.current) {
-        timeout.current = window.setTimeout(run, 60 * 1000);
+  useEffect(() => {
+    // Set a timer to poll data every 5 minutes when the app 
+    // is in the foreground. Headless calls will be used for 
+    // background sync.
+    const pollRideData = async () => {
+      // Should scrape rides ensures that refreshes don't happen
+      // more than once every 5 minutes.
+      if (await shouldScrapeRides()) {
+        await handleRefresh();
       }
-    }, []);
-    useEffect(() => {
-      mountedRef.current = true;
-      run();
-      return () => {
-        mountedRef.current = false;
-        window.clearTimeout(timeout.current);
-      };
-    }, [run]);
-  };
-  useSubscribeToScraping();
+    };
+    const interval = setInterval(async () => {
+      await pollRideData();
+    }, 60 * 1000);
+    return () => {
+      clearInterval(interval);
+    };
+  }, [handleRefresh]);
 
   const handleUpdateWebId = async updatedWebId => {
     setWebId(updatedWebId);
