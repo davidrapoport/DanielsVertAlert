@@ -1,6 +1,13 @@
-import { View, Text, SectionList, StyleSheet, ScrollView } from "react-native";
+import { View, Text, SectionList, StyleSheet, ScrollView, ActivityIndicator } from "react-native";
 import { PieChart } from 'react-native-svg-charts'
 import { Rect, Svg } from 'react-native-svg'
+import {
+    getCurrentStreak,
+    getBestStreak,
+    getFastestCollinsLap,
+    getNumRestDays,
+    sortAscending
+} from "../RideUtils";
 
 
 const getColorFromLift = name => {
@@ -20,42 +27,12 @@ const getColorFromLift = name => {
     return '#636363';
 }
 
-const getFastestCollinsLap = ridesData => {
-    const MAX_TIME_SEC = 60 * 60 * 24;
-    let fastestDate = "";
-    let fastestTime = MAX_TIME_SEC;
-    ridesData.forEach(({ date, totalVert, rides }) => {
-        if (rides.length < 1) {
-            return;
-        }
-        for (let i = 1; i < rides.length; i++) {
-            if (rides[i].lift === 'Collins' && rides[i - 1].lift === 'Collins') {
-                const time1 = new Date('1970-01-01T' + rides[i].time).getTime();
-                const time2 = new Date('1970-01-01T' + rides[i - 1].time).getTime();
-                const diff_sec = (time1 - time2) / 1000;
-                if (diff_sec < fastestTime) {
-                    fastestTime = diff_sec;
-                    fastestDate = date;
-                }
-            }
-        }
-    });
-    if (fastestTime === MAX_TIME_SEC) {
-        return null;
-    }
-    const fastestTimeString = `${Math.floor(fastestTime / 60)} minutes and ${fastestTime % 60} seconds`;
-    return { 'fastestTime': fastestTimeString, 'fastestDate': fastestDate }
-}
-
 // Format of ridesData [{date, totalVert, rides[]}]
 const SeasonStatsView = ({ ridesData, refreshControl }) => {
-    // Sort in ascending order.
-    ridesData.sort((a, b) => {
-        if (a.date < b.date) {
-            return -1;
-        }
-    })
-
+    if (!ridesData) {
+        return <ActivityIndicator size={'large'} />;
+    }
+    ridesData = sortAscending(ridesData);
     const flattenedRides = [];
     ridesData.forEach(
         daysRides => daysRides.rides.forEach(
@@ -68,37 +45,55 @@ const SeasonStatsView = ({ ridesData, refreshControl }) => {
         numRidesPerLift[ride.lift] += 1;
     })
 
-    const seasonVert = ridesData.reduce((acc, { totalVert }) => { return acc + totalVert }, 0);
-    const numMidloads = 'Collins Angle' in numRidesPerLift ? numRidesPerLift['Collins Angle'] : 0;
-    let midloadPlural = numMidloads === 1 ? 'time' : 'times';
-    const fastestCollinsTime = getFastestCollinsLap(ridesData);
-    let fastestCollinsString;
-    if (fastestCollinsTime) {
-        fastestCollinsString = 'Your fastest collins lap was '
-            + fastestCollinsTime['fastestTime'] +
-            ' on ' + fastestCollinsTime['fastestDate'] + '. ';
-    }
     return (
         <ScrollView style={styles.statsViewContainer} refreshControl={refreshControl}>
             <Text style={styles.h1}>
                 Season Stats
             </Text>
-            <Text style={styles.h2}>
-                At a glance
-            </Text>
-            <Text style={styles.summaryText}>
-                You've skied {flattenedRides.length} laps in{' '}
-                {ridesData.length} days for a total of{' '}
-                {seasonVert.toLocaleString()} vertical feet.{' '}
-                {fastestCollinsString}
-                But most importantly, you've midloaded
-                {` ${numMidloads} ${midloadPlural}`}
-            </Text>
+            <SummaryTable ridesData={ridesData} numRidesPerLift={numRidesPerLift} />
             <RideStatsPieChart numRidesPerLift={numRidesPerLift} />
             <LiftBreakdownTable numRidesPerLift={numRidesPerLift} />
         </ScrollView>
     )
 };
+
+const SummaryTable = ({ ridesData, numRidesPerLift }) => {
+    const seasonVert = ridesData.reduce((acc,
+        { totalVert }) => { return acc + totalVert }, 0);
+    const numLaps = Object.values(numRidesPerLift).reduce(
+        (acc, laps) => { return acc + laps }, 0);
+    const numMidloads = 'Collins Angle' in numRidesPerLift ? numRidesPerLift['Collins Angle'] : 0;
+    const fastestCollinsTime = getFastestCollinsLap(ridesData);
+    const labelsValues = [
+        ['Laps:', numLaps],
+        ['Total Vert:', seasonVert + ' feet'],
+        ['Days Skied:', ridesData.length],
+        ['Rest Days:', getNumRestDays(ridesData)],
+        ['Current Ski Streak:', getCurrentStreak(ridesData) + ' day(s)'],
+        ['Best Streak:', getBestStreak(ridesData) + ' day(s)'],
+        ["Times You've Cucked:", numMidloads],
+    ];
+    if (fastestCollinsTime) {
+        labelsValues.push(['Fastest Collins Lap:', fastestCollinsTime.fastestTime]);
+        labelsValues.push(['Date of Fastest Collins Lap:', fastestCollinsTime.fastestDate]);
+    }
+
+    return (
+        <View>
+            <Text style={styles.h2}>
+                At a glance
+            </Text>
+            <View style={{ flexDirection: 'column' }}>
+                {labelsValues.map(labelValue => {
+                    return (
+                        <View style={styles.tr} key={labelValue[0]}>
+                            <Text style={{ marginRight: 12 }}>{labelValue[0]} </Text>
+                            <Text>{labelValue[1]} </Text>
+                        </View>)
+                })}
+            </View>
+        </View >)
+}
 
 const LiftBreakdownTable = ({ numRidesPerLift }) => {
     const totalLaps = Object.values(numRidesPerLift).reduce((prev, acc) => prev + acc);
@@ -216,6 +211,9 @@ const styles = StyleSheet.create({
         fontSize: 16,
         fontWeight: 'bold',
         width: '50%',
+    },
+    tableText: {
+        textAlign: "center"
     },
     td: {
         borderWidth: 1,

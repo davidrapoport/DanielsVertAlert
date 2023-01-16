@@ -1,11 +1,5 @@
 import { View, Text, SectionList, StyleSheet, ActivityIndicator } from "react-native";
-
-const getCurrentDateInFormat = () => {
-    const date = new Date();
-    return (dateString = new Date(date.getTime() - date.getTimezoneOffset() * 60000)
-        .toISOString()
-        .split('T')[0]);
-};
+import { sortDescending, getCurrentDateInFormat } from "../RideUtils";
 
 const formatDate = (dateString) => {
     const date = new Date();
@@ -21,14 +15,7 @@ const HistoricRidesView = ({
     if (!ridesData) {
         return <ActivityIndicator size={'large'} />
     }
-    // Sort in descending order.
-    ridesData.sort((a, b) => {
-        if (b.date < a.date) {
-            return -1;
-        } if (a.date < b.date) {
-            return 1;
-        }
-    })
+    ridesData = sortDescending(ridesData);
     let ridesDataToRender = ridesData;
     if (onlyShowTodays) {
         ridesDataToRender = [ridesData[0]];
