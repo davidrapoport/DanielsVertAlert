@@ -6,7 +6,9 @@ import {
     getBestStreak,
     getFastestCollinsLap,
     getNumRestDays,
-    sortAscending
+    sortAscending,
+    getVertLastSevenDays,
+    getVertSinceMonday
 } from "../RideUtils";
 
 
@@ -66,11 +68,13 @@ const SummaryTable = ({ ridesData, numRidesPerLift }) => {
     const fastestCollinsTime = getFastestCollinsLap(ridesData);
     const labelsValues = [
         ['Laps:', numLaps],
-        ['Total Vert:', seasonVert + ' feet'],
+        ['Total Vert:', seasonVert.toLocaleString() + ' feet'],
         ['Days Skied:', ridesData.length],
         ['Rest Days:', getNumRestDays(ridesData)],
         ['Current Ski Streak:', getCurrentStreak(ridesData) + ' day(s)'],
         ['Best Streak:', getBestStreak(ridesData) + ' day(s)'],
+        ['Vert Last 7 Days:', getVertLastSevenDays(ridesData) + ' feet'],
+        ['Vert Since Monday:', getVertSinceMonday(ridesData) + ' feet'],
         ["Times You've Cucked:", numMidloads],
     ];
     if (fastestCollinsTime) {

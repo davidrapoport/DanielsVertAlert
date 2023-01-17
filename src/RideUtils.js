@@ -1,4 +1,4 @@
-import { differenceInDays } from "date-fns";
+import { differenceInDays, isAfter, isMonday, isSameDay, subDays } from "date-fns";
 
 export const getFastestCollinsLap = ridesData => {
     const MAX_TIME_SEC = 60 * 60 * 24;
@@ -102,6 +102,39 @@ export const getCurrentStreak = ridesData => {
         }
     }
     return currentStreak;
+}
+
+export const getVertLastSevenDays = ridesData => {
+    ridesData = sortDescending(ridesData);
+    const today = getCurrentDateAlta();
+    const sevenDaysAgo = subDays(today, 7);
+    let totalVert = 0;
+    let i = 0;
+    let currentDay = convertStringToLocalDate(ridesData[i].date);
+    while (isAfter(currentDay, sevenDaysAgo) && i < ridesData.length) {
+        totalVert += ridesData[i].totalVert;
+        i++;
+        currentDay = convertStringToLocalDate(ridesData[i].date);
+    }
+    return totalVert;
+}
+
+export const getVertSinceMonday = ridesData => {
+    ridesData = sortDescending(ridesData);
+    let lastMonday = getCurrentDateAlta();
+    while (!isMonday(lastMonday)) {
+        lastMonday = subDays(lastMonday, 1);
+    }
+    let totalVert = 0;
+    let i = 0;
+    let currentDay = convertStringToLocalDate(ridesData[i].date);
+    while (i < ridesData.length &&
+        (isAfter(currentDay, lastMonday) || isSameDay(currentDay, lastMonday))) {
+        totalVert += ridesData[i].totalVert;
+        i++;
+        currentDay = convertStringToLocalDate(ridesData[i].date);
+    }
+    return totalVert;
 }
 
 export const getCurrentDateInFormat = () => {
