@@ -1,3 +1,4 @@
+import { getCurrentDateAlta } from "./RideUtils";
 import { getLastRefreshTime, getWebId } from "./Storage";
 
 const FIVE_MIN_MILLIS = 5 * 60 * 1000
@@ -8,9 +9,7 @@ export const shouldScrapeRides = async () => {
     if (webID === null) {
         return false;
     }
-    const currentDateAlta = new Date(
-        new Date().toLocaleString('en-US', { timeZone: 'America/Denver' }),
-    );
+    const currentDateAlta = getCurrentDateAlta();
     // Only scrape if it's been more than 5 minutes.
     const lastRefreshTime = await getLastRefreshTime();
     if (lastRefreshTime !== null) {

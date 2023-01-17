@@ -54,6 +54,8 @@ export const getNumRestDays = ridesData => {
     return restDays;
 }
 
+// Since we don't need to compare with local time, we can just 
+// use UTC dates to compare here.
 export const getBestStreak = ridesData => {
     ridesData = sortAscending(ridesData);
     let bestStreak = 1;
@@ -73,11 +75,20 @@ export const getBestStreak = ridesData => {
     return bestStreak;
 }
 
+// Use local dates here since we want to see if the day has ended.
+// And if we mix local dates and UTC dates we'll get some off by one errors.
 export const getCurrentStreak = ridesData => {
     ridesData = sortDescending(ridesData);
-    const today = new Date();
-    let lastSkiDay = new Date(ridesData[0].date);
-    if (differenceInDays(today, lastSkiDay) > 2) {
+    const today = getCurrentDateAlta();
+    let excludeTodayIfMissing = true;
+    if (today.getHours() >= 16 || (today.getHours() === 16 && today.getMinutes() > 30)) {
+        excludeTodayIfMissing = false;
+    }
+    let lastSkiDay = convertStringToLocalDate(ridesData[0].date);
+    if (differenceInDays(today, lastSkiDay) >= 2) {
+        return 0;
+    }
+    if (differenceInDays(today, lastSkiDay) === 1 && !excludeTodayIfMissing) {
         return 0;
     }
     let currentStreak = 1;
@@ -95,7 +106,19 @@ export const getCurrentStreak = ridesData => {
 
 export const getCurrentDateInFormat = () => {
     const date = new Date();
-    return (dateString = new Date(date.getTime() - date.getTimezoneOffset() * 60000)
+    const dateString = new Date(date.getTime() - date.getTimezoneOffset() * 60000)
         .toISOString()
-        .split('T')[0]);
+        .split('T')[0];
+    return dateString;
 };
+
+export const getCurrentDateAlta = () => {
+    return new Date(
+        new Date().toLocaleString('en-US', { timeZone: 'America/Denver' }),
+    );
+};
+
+export const convertStringToLocalDate = (stringDate) => {
+    const date = new Date(stringDate);
+    return new Date(date.getTime() + date.getTimezoneOffset() * 60000);
+}
