@@ -87,7 +87,7 @@ const SummaryTable = ({ ridesData, numRidesPerLift }) => {
                 {labelsValues.map(labelValue => {
                     return (
                         <View style={styles.tr} key={labelValue[0]}>
-                            <Text style={{ marginRight: 12 }}>{labelValue[0]} </Text>
+                            <Text style={{ marginRight: 12, fontWeight: 'bold' }}>{labelValue[0]} </Text>
                             <Text>{labelValue[1]} </Text>
                         </View>)
                 })}
