@@ -44,10 +44,14 @@ function WeeklyViewChart({ ridesData }) {
             labels.push((currentDate.getMonth() + 1) + '/' +
                 (currentDate.getDate() + 1))
         }
-        const rideDate = convertStringToLocalDate(ridesData[ridesIndex].date);
-        if (isSameDay(rideDate, currentDate)) {
-            weekTotal += ridesData[ridesIndex].totalVert;
-            ridesIndex++;
+        // It's possible we still have days to go to catch up to 'today'
+        // But there aren't any more rides (ex. last 5 days have been rest days).
+        if (ridesIndex < ridesData.length) {
+            const rideDate = convertStringToLocalDate(ridesData[ridesIndex].date);
+            if (isSameDay(rideDate, currentDate)) {
+                weekTotal += ridesData[ridesIndex].totalVert;
+                ridesIndex++;
+            }
         }
         if (dayCounter % 7 === 6) {
             data.push(weekTotal);
