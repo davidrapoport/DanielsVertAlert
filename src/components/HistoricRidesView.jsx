@@ -1,5 +1,6 @@
 import { View, Text, SectionList, StyleSheet, ActivityIndicator } from "react-native";
 import { sortDescending, getCurrentDateInFormat } from "../RideUtils";
+import { material } from "react-native-typography";
 
 const formatDate = (dateString) => {
     const date = new Date();
@@ -48,7 +49,7 @@ const HistoricRidesView = ({
         <View style={styles.container}>
             <SectionList
                 sections={sections}
-                renderItem={({ item }) => <RideView ride={item} />}
+                renderItem={({ item, index }) => <RideView ride={item} index={index} />}
                 renderSectionHeader={({ section }) => <DayHeaderView rides={section} />}
                 keyExtractor={(item) => `basicListEntry-${item.timestamp}`}
                 refreshControl={refreshControl}
@@ -69,7 +70,7 @@ const DayHeaderView = ({ rides }) => {
     return <Text style={styles.sectionHeader}>{rides.title}</Text>
 }
 
-const RideView = ({ ride }) => {
+const RideView = ({ ride, index }) => {
     const rawTime = ride.time;
     const split = rawTime.split(":");
     const oldHour = parseInt(split[0]);
@@ -83,7 +84,7 @@ const RideView = ({ ride }) => {
     }
     const time = `${newHour}:${split[1]} ${modifier}`;
     return (
-        <View style={styles.rowContainer} >
+        <View style={index === 0 ? styles.firstRowContainer : styles.rowContainer} >
             <Text style={styles.liftName}>{ride.lift}</Text>
             <Text style={styles.time}> {time}</Text>
             <Text style={styles.vert}>{ride.vert}</Text>
@@ -97,22 +98,27 @@ const styles = StyleSheet.create({
         marginHorizontal: 8,
     },
     h1: {
-        fontSize: 36,
-        paddingBottom: 2,
-        fontWeight: 'bold',
+        ...material.display2,
+        paddingBottom: 12,
     },
     h3: {
-        fontSize: 22,
+        ...material.headline,
     },
     sectionHeader: {
         paddingTop: 12,
         paddingRight: 10,
         paddingBottom: 8,
-        fontSize: 22,
-        fontWeight: 'bold',
-        backgroundColor: 'rgba(247,247,247,1.0)',
+        ...material.title,
     },
     rowContainer: {
+        flex: 1,
+        borderWidth: 1,
+        borderTopWidth: 0,
+        alignItems: 'stretch',
+        justifyContent: 'space-evenly',
+        flexDirection: "row",
+    },
+    firstRowContainer: {
         flex: 1,
         borderWidth: 1,
         alignItems: 'stretch',
@@ -123,21 +129,21 @@ const styles = StyleSheet.create({
         flex: 1,
         paddingVertical: 10,
         paddingRight: 20,
-        fontSize: 18,
         height: 44,
+        ...material.body1Object,
     },
     vert: {
         flex: 1,
         paddingVertical: 10,
-        fontSize: 18,
         height: 44,
+        ...material.body1Object,
     },
     liftName: {
         flex: 2,
         paddingVertical: 9,
         paddingLeft: 10,
-        fontSize: 18,
         height: 44,
+        ...material.body1Object,
     },
 });
 

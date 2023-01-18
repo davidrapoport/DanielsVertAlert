@@ -3,6 +3,7 @@ import { addDays } from "date-fns/esm";
 import { useState } from "react";
 import { View, Text, Switch, StyleSheet } from "react-native"
 import { Grid, BarChart, XAxis, YAxis } from 'react-native-svg-charts'
+import { material } from "react-native-typography";
 import { convertStringToLocalDate, getCurrentDateAlta, sortAscending } from "../RideUtils";
 
 
@@ -12,14 +13,23 @@ function VertCharts({ ridesData, refreshControl }) {
 
     return (
         <View style={styles.container} refreshControl={refreshControl}>
-            <Text style={{ paddingTop: 20 }}
-            >{isCumulativeView ? "Show Weekly Amounts?" : "Show Cumulative Vert"}</Text>
-            <Switch
-                onValueChange={toggleSwitch}
-                trackColor={{ false: '#808080' }}
-                ios_backgroundColor={'#808080'}
-                value={isCumulativeView}
-            />
+            <Text style={{ ...material.display2, paddingBottom: 12 }}>
+                How's Yer Vert?
+            </Text>
+            <View style={{ flexDirection: 'row', alignItems: 'center' }}>
+                <Text style={{
+                    paddingRight: 12,
+                    ...material.title
+                }}>
+                    {isCumulativeView ? "Show Weekly Amounts?" : "Show Cumulative Vert"}
+                </Text>
+                <Switch
+                    onValueChange={toggleSwitch}
+                    trackColor={{ false: '#808080' }}
+                    ios_backgroundColor={'#808080'}
+                    value={isCumulativeView}
+                />
+            </View>
             {isCumulativeView ?
                 <Text style={styles.chartHeader}>Total Vert Per Year</Text> :
                 <Text style={styles.chartHeader}>Vert Per Week</Text>}
@@ -176,8 +186,7 @@ const styles = StyleSheet.create({
     },
     chartHeader: {
         marginTop: 25,
-        fontFamily: 'bold',
-        fontSize: 26,
+        ...material.headline,
     },
 });
 

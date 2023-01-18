@@ -11,6 +11,7 @@ import {
     getVertLastSevenDays,
     getVertSinceMonday
 } from "../RideUtils";
+import { material } from "react-native-typography";
 
 
 const getColorFromLift = name => {
@@ -192,17 +193,12 @@ const styles = StyleSheet.create({
         paddingTop: 22
     },
     h1: {
-        fontSize: 36,
-        paddingBottom: 2,
-        fontWeight: 'bold',
+        paddingBottom: 12,
+        ...material.display2,
     },
     h2: {
-        fontSize: 28,
-        paddingBottom: 2,
-        fontWeight: 'bold',
-    },
-    summaryText: {
-        fontSize: 18,
+        paddingBottom: 12,
+        ...material.headline,
     },
     labels: {
         paddingTop: 8,
@@ -216,23 +212,20 @@ const styles = StyleSheet.create({
     },
     labelText: {
         paddingRight: 20,
-        fontSize: 16,
-        fontWeight: 'bold',
         width: '50%',
-    },
-    tableText: {
-        textAlign: "center"
+        ...material.subheading,
     },
     td: {
         borderWidth: 1,
         flex: 1,
         padding: 4,
+        ...material.body1,
     },
     th: {
         borderWidth: 1,
         flex: 1,
-        fontWeight: 'bold',
         padding: 4,
+        ...material.body2,
     },
     tr: {
         flexDirection: "row",
@@ -240,7 +233,7 @@ const styles = StyleSheet.create({
     table: {
         marginBottom: 24,
         paddingBottom: 24,
-        marginTop: 24,
+        marginTop: 12,
     },
 });
 
