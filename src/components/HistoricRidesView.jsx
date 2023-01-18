@@ -37,7 +37,7 @@ const HistoricRidesView = ({
         sections.push({
             title: `${formatDate(rides.date)}: You ` +
                 `skied ${rides.rides.length} ${laps} for ` +
-                `${rides.totalVert} feet`, data: rides.rides
+                `${rides.totalVert.toLocaleString()} feet`, data: rides.rides
         })
     })
     let headerText = `Historic Ride Data`

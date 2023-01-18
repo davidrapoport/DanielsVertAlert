@@ -5,6 +5,7 @@ import {
     getCurrentStreak,
     getBestStreak,
     getFastestCollinsLap,
+    getBiggestDay,
     getNumRestDays,
     sortAscending,
     getVertLastSevenDays,
@@ -66,6 +67,7 @@ const SummaryTable = ({ ridesData, numRidesPerLift }) => {
         (acc, laps) => { return acc + laps }, 0);
     const numMidloads = 'Collins Angle' in numRidesPerLift ? numRidesPerLift['Collins Angle'] : 0;
     const fastestCollinsTime = getFastestCollinsLap(ridesData);
+    const biggestDay = getBiggestDay(ridesData);
     const labelsValues = [
         ['Laps:', numLaps],
         ['Total Vert:', seasonVert.toLocaleString() + ' feet'],
@@ -76,6 +78,8 @@ const SummaryTable = ({ ridesData, numRidesPerLift }) => {
         ['Vert Last 7 Days:', getVertLastSevenDays(ridesData) + ' feet'],
         ['Vert Since Monday:', getVertSinceMonday(ridesData) + ' feet'],
         ["Times You've Cucked:", numMidloads],
+        ["Biggest Day:", biggestDay.vert.toLocaleString() + ' feet'],
+        ["Date of Biggest Day:", biggestDay.date],
     ];
     if (fastestCollinsTime) {
         labelsValues.push(['Fastest Collins Lap:', fastestCollinsTime.fastestTime]);

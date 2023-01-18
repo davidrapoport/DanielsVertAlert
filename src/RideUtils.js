@@ -27,6 +27,17 @@ export const getFastestCollinsLap = ridesData => {
     return { 'fastestTime': fastestTimeString, 'fastestDate': fastestDate }
 }
 
+export const getBiggestDay = (ridesData) => {
+    ridesData.sort((a, b) => {
+        if (a.totalVert < b.totalVert) {
+            return 1;
+        } else if (a.totalVert > b.totalVert) {
+            return -1;
+        }
+    });
+    return { vert: ridesData[0].totalVert, date: ridesData[0].date };
+}
+
 const sortByDate = (ridesData, sortAscending) => {
     ridesData.sort((a, b) => {
         if (a.date < b.date) {
