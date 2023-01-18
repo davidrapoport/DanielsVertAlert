@@ -35,6 +35,15 @@ const getUserMetadata = async (requestHeaders, webId) => {
         headers: requestHeaders,
         body: JSON.stringify(data),
     });
+    if (webIdResponse.status !== 200) {
+        if (webIdResponse.status === 422) {
+            throw new Error('Invalid Web Id, please re-enter it and try again.');
+        }
+        throw new Error(`Request to alta.com failed with error 
+                        code ${webIdResponse.status}
+                        Maybe the server is down or you aren't connected
+                        to the internet?`);
+    }
     return webIdResponse;
 }
 
@@ -87,8 +96,13 @@ const getRideData = async (
         headers: requestHeaders,
         body: JSON.stringify(rideRequestBody),
     });
+    if (ridesResponse.status !== 200) {
+        throw new Error(`Request to alta.com failed with error 
+                        code ${ridesResponse.status}
+                        Maybe the server is down or you aren't connected
+                        to the internet?`);
+    }
     const data = await ridesResponse.json();
-    console.log(data);
     return parseRides(data);
 };
 

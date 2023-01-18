@@ -13,6 +13,7 @@ import {
 } from './src/Storage';
 import TabNavigator from './src/components/TabNavigator';
 import WebIdEntryForm from './src/components/WebIdEntryForm';
+import FlashMessage, { showMessage } from 'react-native-flash-message';
 
 function App() {
   const [webId, setWebId] = React.useState();
@@ -61,14 +62,19 @@ function App() {
     };
   }, [handleRefresh]);
 
+  const clearAllData = async () => {
+    setRideData(null);
+    setLastRefreshTime(null);
+    setWebId(null);
+    await clearAllStoredData();
+  }
+
   const handleUpdateWebId = async updatedWebId => {
     setWebId(updatedWebId);
     await storeWebId(updatedWebId);
     // This happens when the user clears their WebId.
     if (!updatedWebId) {
-      setRideData(null);
-      setLastRefreshTime(null);
-      await clearAllStoredData();
+      await clearAllData();
       return;
     }
     // Refresh the data with a new webId
@@ -81,7 +87,15 @@ function App() {
     // TODO fix race condition causing you to have to read this from storage
     // instead of ReactState.
     const storedWebId = await getWebId();
-    const rides = await scrapeRides(storedWebId);
+    let rides;
+    try {
+      rides = await scrapeRides(storedWebId);
+    } catch (thrownError) {
+      await clearAllData();
+      setIsRefreshing(false);
+      showMessage({ message: thrownError.message, type: 'danger', duration: 5000 });
+      return;
+    }
     const refreshTime = new Date();
     setLastRefreshTime(refreshTime);
     await storeLastRefreshTime(refreshTime);
@@ -100,6 +114,7 @@ function App() {
     return (
       <View style={styles.container}>
         <ActivityIndicator size="large" />
+        <FlashMessage position={'top'} />
       </View>
     );
   }
@@ -108,6 +123,7 @@ function App() {
     return (
       <View style={styles.container}>
         <WebIdEntryForm savedWebId={webId} handleUpdateWebId={handleUpdateWebId} />
+        <FlashMessage position={'top'} />
       </View>
     )
   }
@@ -116,12 +132,15 @@ function App() {
 
   //TODO migrate to React.Context
   return (
-    <TabNavigator
-      rideData={rideData}
-      refreshControl={refreshControl}
-      savedWebId={webId}
-      handleUpdateWebId={handleUpdateWebId}
-      lastRefreshTime={lastRefreshTime} />
+    <>
+      <TabNavigator
+        rideData={rideData}
+        refreshControl={refreshControl}
+        savedWebId={webId}
+        handleUpdateWebId={handleUpdateWebId}
+        lastRefreshTime={lastRefreshTime} />
+      <FlashMessage position={'top'} />
+    </>
   );
 }
 
