@@ -5,6 +5,7 @@ import SeasonStatsView from './SeasonStatsView';
 import WebIdEntryForm from './WebIdEntryForm';
 
 import Ionicons from 'react-native-vector-icons/Ionicons';
+import VertCharts from './VertCharts';
 
 const Tab = createBottomTabNavigator();
 
@@ -26,8 +27,10 @@ function TabNavigator({
                             iconName = 'settings-outline';
                         } else if (route.name === 'Season Stats') {
                             iconName = 'today-outline';
-                        } else if (route.name === 'All Rides') {
+                        } else if (route.name === 'Vert Charts') {
                             iconName = 'trending-up-outline';
+                        } else if (route.name === 'All Rides') {
+                            iconName = 'layers-outline';
                         }
                         return <Ionicons name={iconName} size={size} color={color} />;
                     },
@@ -50,6 +53,13 @@ function TabNavigator({
                 <Tab.Screen name="Season Stats" >
                     {(props) => {
                         return <SeasonStatsView {...props}
+                            ridesData={rideData}
+                            refreshControl={refreshControl} />
+                    }}
+                </Tab.Screen>
+                <Tab.Screen name="Vert Charts" >
+                    {(props) => {
+                        return <VertCharts {...props}
                             ridesData={rideData}
                             refreshControl={refreshControl} />
                     }}
