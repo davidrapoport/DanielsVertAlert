@@ -12,13 +12,17 @@ function VertCharts({ ridesData, refreshControl }) {
 
     return (
         <View style={styles.container} refreshControl={refreshControl}>
-            <Text>{isCumulativeView ? "Show Weekly Amounts?" : "Show Cumulative Vert"}</Text>
+            <Text style={{ paddingTop: 20 }}
+            >{isCumulativeView ? "Show Weekly Amounts?" : "Show Cumulative Vert"}</Text>
             <Switch
                 onValueChange={toggleSwitch}
                 trackColor={{ false: '#808080' }}
                 ios_backgroundColor={'#808080'}
                 value={isCumulativeView}
             />
+            {isCumulativeView ?
+                <Text style={styles.chartHeader}>Total Vert Per Year</Text> :
+                <Text style={styles.chartHeader}>Vert Per Week</Text>}
             {isCumulativeView ?
                 <CumulativeViewChart ridesData={ridesData} /> :
                 <WeeklyViewChart ridesData={ridesData} />}
@@ -60,7 +64,7 @@ function WeeklyViewChart({ ridesData }) {
     const numberOfTicks = Math.ceil(gridMax / 10000);
     const xAxisHeight = 100
     return (
-        <View style={{ height: 600, padding: 20, flexDirection: 'row' }}>
+        <View style={{ height: 500, padding: 20, flexDirection: 'row' }}>
             <YAxis
                 data={data}
                 style={{ marginBottom: xAxisHeight }}
@@ -90,7 +94,7 @@ function WeeklyViewChart({ ridesData }) {
                     }}
                     data={data}
                     formatLabel={(value, index) => labels[index]}
-                    contentInset={{ left: 20, right: 20 }}
+                    contentInset={{ left: 35, right: 35 }}
                     numberOfTicks={labels.length}
                     svg={xAxesSvg}
                 />
@@ -122,7 +126,7 @@ function CumulativeViewChart({ ridesData }) {
     const numberOfTicks = Math.ceil((total * 1.2) / 50000);
     const xAxisHeight = 100
     return (
-        <View style={{ height: 600, padding: 20, flexDirection: 'row' }}>
+        <View style={{ height: 500, padding: 20, flexDirection: 'row' }}>
             <YAxis
                 data={data}
                 style={{ marginBottom: xAxisHeight }}
@@ -165,6 +169,11 @@ const styles = StyleSheet.create({
         flex: 1,
         alignItems: 'center',
         justifyContent: 'center',
+    },
+    chartHeader: {
+        marginTop: 25,
+        fontFamily: 'bold',
+        fontSize: 26,
     },
 });
 
