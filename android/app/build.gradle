@@ -93,9 +93,9 @@ android {
 
     compileSdkVersion rootProject.ext.compileSdkVersion
 
-    namespace "com.rndiffapp"
+    namespace "com.danielsvertalert"
     defaultConfig {
-        applicationId "com.rndiffapp"
+        applicationId "com.danielsvertalert"
         minSdkVersion rootProject.ext.minSdkVersion
         targetSdkVersion rootProject.ext.targetSdkVersion
         versionCode 1
