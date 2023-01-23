@@ -1,5 +1,20 @@
 import { differenceInDays, isAfter, isMonday, isSameDay, subDays } from "date-fns";
 
+export const getNumRidesPerLift = ridesData => {
+    const flattenedRides = [];
+    ridesData.forEach(
+        daysRides => daysRides.rides.forEach(
+            ride => flattenedRides.push(ride)));
+    const numRidesPerLift = {};
+    flattenedRides.forEach(ride => {
+        if (!(ride.lift in numRidesPerLift)) {
+            numRidesPerLift[ride.lift] = 0;
+        }
+        numRidesPerLift[ride.lift] += 1;
+    })
+    return numRidesPerLift;
+}
+
 export const getFastestCollinsLap = ridesData => {
     const MAX_TIME_SEC = 60 * 60 * 24;
     let fastestDate = "";

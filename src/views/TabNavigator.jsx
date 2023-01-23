@@ -1,11 +1,11 @@
 import { NavigationContainer } from '@react-navigation/native';
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
-import HistoricRidesView from './HistoricRidesView';
-import SeasonStatsView from './SeasonStatsView';
-import WebIdEntryForm from './WebIdEntryForm';
+import WebIdEntryForm from '../components/WebIdEntryForm';
 
 import Ionicons from 'react-native-vector-icons/Ionicons';
-import VertCharts from './VertCharts';
+import VertCharts from '../components/VertCharts';
+import DailyStatsView from './DailyStatsView';
+import DonutView from './DonutView';
 
 const Tab = createBottomTabNavigator();
 
@@ -25,8 +25,8 @@ function TabNavigator({
                             iconName = 'snow-outline';
                         } else if (route.name === 'Settings') {
                             iconName = 'settings-outline';
-                        } else if (route.name === 'Season Stats') {
-                            iconName = 'today-outline';
+                        } else if (route.name === 'Donut') {
+                            iconName = 'pie-chart-outline';
                         } else if (route.name === 'Vert Charts') {
                             iconName = 'trending-up-outline';
                         } else if (route.name === 'All Rides') {
@@ -43,16 +43,15 @@ function TabNavigator({
                 })}>
                 <Tab.Screen name="Daily Stats" >
                     {(props) => {
-                        return <HistoricRidesView {...props}
+                        return <DailyStatsView {...props}
                             ridesData={rideData}
                             lastRefreshTime={lastRefreshTime}
-                            onlyShowTodays={true}
                             refreshControl={refreshControl} />;
                     }}
                 </Tab.Screen>
-                <Tab.Screen name="Season Stats" >
+                <Tab.Screen name="Donut" >
                     {(props) => {
-                        return <SeasonStatsView {...props}
+                        return <DonutView {...props}
                             ridesData={rideData}
                             refreshControl={refreshControl} />
                     }}
@@ -62,15 +61,6 @@ function TabNavigator({
                         return <VertCharts {...props}
                             ridesData={rideData}
                             refreshControl={refreshControl} />
-                    }}
-                </Tab.Screen>
-                <Tab.Screen name="All Rides" >
-                    {(props) => {
-                        return <HistoricRidesView {...props}
-                            ridesData={rideData}
-                            lastRefreshTime={lastRefreshTime}
-                            onlyShowTodays={false}
-                            refreshControl={refreshControl} />;
                     }}
                 </Tab.Screen>
                 <Tab.Screen name="Settings">

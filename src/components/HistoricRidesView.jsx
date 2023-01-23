@@ -1,5 +1,5 @@
-import { View, Text, SectionList, StyleSheet, ActivityIndicator } from "react-native";
-import { sortDescending, getCurrentDateInFormat } from "../RideUtils";
+import { View, Text, SectionList, StyleSheet } from "react-native";
+import { sortDescending } from "../RideUtils";
 import { material } from "react-native-typography";
 
 const formatDate = (dateString) => {
@@ -11,31 +11,11 @@ const formatDate = (dateString) => {
 const HistoricRidesView = ({
     ridesData,
     lastRefreshTime,
-    onlyShowTodays,
-    refreshControl }) => {
-    if (!ridesData) {
-        return <ActivityIndicator size={'large'} />
-    }
+    refreshControl,
+    headerComponent }) => {
     ridesData = sortDescending(ridesData);
-    let ridesDataToRender = ridesData;
-    if (onlyShowTodays) {
-        ridesDataToRender = [ridesData[0]];
-        if (ridesData[0].date !== getCurrentDateInFormat()) {
-            return (
-                <View style={{ flexDirection: 'row' }}>
-                    <View style={styles.emptyContainer} refreshControl={refreshControl}>
-                        <Text style={styles.noRideMessage}>
-                            No rides yet today... What, are you interlodged?
-                            {' '} Or do you just like getting paid $600 a month
-                            {' '} to eat Andrew's "lasagna"?
-                        </Text>
-                    </View>
-                </View>
-            )
-        }
-    }
     const sections = [];
-    ridesDataToRender.forEach(rides => {
+    ridesData.forEach(rides => {
         const laps = rides.rides.length > 1 ? 'laps' : 'lap';
         sections.push({
             title: `${formatDate(rides.date)}: You ` +
@@ -43,10 +23,6 @@ const HistoricRidesView = ({
                 `${rides.totalVert.toLocaleString()} feet`, data: rides.rides
         })
     })
-    let headerText = `Historic Ride Data`
-    if (onlyShowTodays) {
-        headerText = `Todays Ride Data`
-    }
     return (
         <View style={styles.container}>
             <SectionList
@@ -55,14 +31,7 @@ const HistoricRidesView = ({
                 renderSectionHeader={({ section }) => <DayHeaderView rides={section} />}
                 keyExtractor={(item) => `basicListEntry-${item.timestamp}`}
                 refreshControl={refreshControl}
-                ListHeaderComponent={<View>
-                    <Text style={styles.h1}>
-                        {headerText}
-                    </Text>
-                    <Text style={styles.h3}>
-                        Last Refreshed: {lastRefreshTime.toLocaleString()}
-                    </Text>
-                </View>}
+                ListHeaderComponent={headerComponent}
             />
         </View>
     )
@@ -98,26 +67,6 @@ const styles = StyleSheet.create({
         flex: 1,
         paddingTop: 22,
         marginHorizontal: 8,
-    },
-    emptyContainer: {
-        flexDirection: 'column',
-        height: '100%',
-        flex: 1,
-        justifyContent: 'center',
-        alignItems: 'center',
-        marginHorizontal: 22,
-        marginTop: 48,
-    },
-    noRideMessage: {
-        textAlign: 'center',
-        ...material.title,
-    },
-    h1: {
-        ...material.display2,
-        paddingBottom: 12,
-    },
-    h3: {
-        ...material.headline,
     },
     sectionHeader: {
         paddingTop: 12,

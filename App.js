@@ -11,7 +11,7 @@ import {
   storeRideData,
   clearAllStoredData,
 } from './src/Storage';
-import TabNavigator from './src/components/TabNavigator';
+import TabNavigator from './src/views/TabNavigator';
 import WebIdEntryForm from './src/components/WebIdEntryForm';
 import FlashMessage, { showMessage } from 'react-native-flash-message';
 
