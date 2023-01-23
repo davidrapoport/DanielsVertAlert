@@ -22,12 +22,14 @@ const HistoricRidesView = ({
         ridesDataToRender = [ridesData[0]];
         if (ridesData[0].date !== getCurrentDateInFormat()) {
             return (
-                <View style={styles.container} refreshControl={refreshControl}>
-                    <Text style={styles.sectionHeader}>
-                        No rides yet today... What, are you interlodged?
-                        {' '} Or do you just like getting paid $600 a month
-                        {' '} to eat Andrew's "lasagna"?
-                    </Text>
+                <View style={{ flexDirection: 'row' }}>
+                    <View style={styles.emptyContainer} refreshControl={refreshControl}>
+                        <Text style={styles.noRideMessage}>
+                            No rides yet today... What, are you interlodged?
+                            {' '} Or do you just like getting paid $600 a month
+                            {' '} to eat Andrew's "lasagna"?
+                        </Text>
+                    </View>
                 </View>
             )
         }
@@ -96,6 +98,19 @@ const styles = StyleSheet.create({
         flex: 1,
         paddingTop: 22,
         marginHorizontal: 8,
+    },
+    emptyContainer: {
+        flexDirection: 'column',
+        height: '100%',
+        flex: 1,
+        justifyContent: 'center',
+        alignItems: 'center',
+        marginHorizontal: 22,
+        marginTop: 48,
+    },
+    noRideMessage: {
+        textAlign: 'center',
+        ...material.title,
     },
     h1: {
         ...material.display2,

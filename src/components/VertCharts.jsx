@@ -16,26 +16,8 @@ function VertCharts({ ridesData, refreshControl }) {
             <Text style={{ ...material.display2, paddingBottom: 12 }}>
                 How's Yer Vert?
             </Text>
-            <View style={{ flexDirection: 'row', alignItems: 'center' }}>
-                <Text style={{
-                    paddingRight: 12,
-                    ...material.title
-                }}>
-                    {isCumulativeView ? "Show Weekly Amounts?" : "Show Cumulative Vert"}
-                </Text>
-                <Switch
-                    onValueChange={toggleSwitch}
-                    trackColor={{ false: '#808080' }}
-                    ios_backgroundColor={'#808080'}
-                    value={isCumulativeView}
-                />
-            </View>
-            {isCumulativeView ?
-                <Text style={styles.chartHeader}>Total Vert Per Year</Text> :
-                <Text style={styles.chartHeader}>Vert Per Week</Text>}
-            {isCumulativeView ?
-                <CumulativeViewChart ridesData={ridesData} /> :
-                <WeeklyViewChart ridesData={ridesData} />}
+            <Text style={styles.chartHeader}>Vert Per Week</Text>
+            <WeeklyViewChart ridesData={ridesData} />
         </View>
     );
 };

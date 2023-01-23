@@ -30,11 +30,11 @@ const WebIdEntryForm = ({ savedWebId, handleUpdateWebId }) => {
     }
 
     if (savedWebId && savedWebId.length > 0) {
-        const title = "Reset Web Id? Current ID is " + savedWebId
+        const title = "Reset Web Id?"
         return (
             <View style={styles.inputContainer}>
                 <Image source={require('../img/Alta_logo_dropshadow.jpg')} />
-                <Button style={material.button} onPress={clearWebId} title={title}></Button>
+                <Button style={styles.button} onPress={clearWebId} title={title}></Button>
             </View>
         )
     }
@@ -62,6 +62,8 @@ const styles = StyleSheet.create({
         borderColor: 'black',
         borderWidth: 3,
         padding: 20,
+        borderRadius: 9,
+        marginBottom: 12,
     },
     inputContainer: {
         flexDirection: 'column',
@@ -69,8 +71,10 @@ const styles = StyleSheet.create({
         alignContent: 'center',
         bottom: 40,
         top: 20,
-        marginLeft: 12,
-        marginRight: 12,
+        width: '90%',
+    },
+    button: {
+
     },
     h3: {
         ...material.title,
