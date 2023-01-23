@@ -133,11 +133,9 @@ export const getVertLastSevenDays = ridesData => {
 export const getVertSinceMonday = ridesData => {
     ridesData = sortDescending(ridesData);
     let lastMonday = getCurrentDateAlta();
-    console.log(lastMonday);
     while (!isMonday(lastMonday)) {
         lastMonday = subDays(lastMonday, 1);
     }
-    console.log(lastMonday);
     let totalVert = 0;
     let i = 0;
     let currentDay = convertStringToLocalDate(ridesData[i].date);
@@ -147,7 +145,6 @@ export const getVertSinceMonday = ridesData => {
         i++;
         currentDay = convertStringToLocalDate(ridesData[i].date);
     }
-    console.log(ridesData[i].date);
     return totalVert;
 }
 
