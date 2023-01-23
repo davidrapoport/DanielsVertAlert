@@ -34,7 +34,6 @@ const RidesPieChart = ({ numRidesPerLift }) => {
     for (lift in numRidesPerLift) {
         labels.push(
             <View style={styles.labelContainer} key={`labelForSeasonPieChart-${lift}`}>
-                <Text style={styles.labelText}>{lift}</Text>
                 <Svg width="50" height="20">
                     <Rect
                         x="0"
@@ -42,10 +41,11 @@ const RidesPieChart = ({ numRidesPerLift }) => {
                         width="50"
                         height="15"
                         fill={getColorFromLift(lift)}
-                        strokeWidth="3"
+                        strokeWidth="0"
                         stroke="rgb(0,0,0)"
                     />
                 </Svg>
+                <Text style={styles.labelText}>{lift}</Text>
             </View>);
     }
 
@@ -87,7 +87,7 @@ const styles = StyleSheet.create({
         flexDirection: "row",
     },
     labelText: {
-        paddingRight: 20,
+        paddingLeft: 20,
         width: '50%',
         ...material.subheading,
     }

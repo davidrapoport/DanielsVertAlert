@@ -3,6 +3,8 @@ import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 import WebIdEntryForm from '../components/WebIdEntryForm';
 
 import Ionicons from 'react-native-vector-icons/Ionicons';
+import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons';
+
 import VertCharts from '../components/VertCharts';
 import DailyStatsView from './DailyStatsView';
 import DonutView from './DonutView';
@@ -21,16 +23,20 @@ function TabNavigator({
                 screenOptions={({ route }) => ({
                     tabBarIcon: ({ focused, color, size }) => {
                         let iconName;
+                        let icon;
                         if (route.name === 'Daily Stats') {
                             iconName = 'snow-outline';
                         } else if (route.name === 'Settings') {
                             iconName = 'settings-outline';
                         } else if (route.name === 'Doughnut') {
-                            iconName = 'pie-chart-outline';
+                            icon = <MaterialCommunityIcons name="chart-donut" size={size} color={color} />
                         } else if (route.name === 'Vert Charts') {
                             iconName = 'trending-up-outline';
                         } else if (route.name === 'All Rides') {
                             iconName = 'layers-outline';
+                        }
+                        if (icon) {
+                            return icon;
                         }
                         return <Ionicons name={iconName} size={size} color={color} />;
                     },
