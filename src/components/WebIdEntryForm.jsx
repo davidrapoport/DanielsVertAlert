@@ -50,6 +50,7 @@ const WebIdEntryForm = ({ savedWebId, handleUpdateWebId }) => {
                 style={styles.input}
                 defaultValue={webId}
                 onChangeText={setWebId}
+                autoCorrect={false}
                 ref={inputRef}>
             </TextInput>
             <Button onPress={onClickUpdateWebId} title="Check my Vert"></Button>
@@ -83,7 +84,6 @@ const styles = StyleSheet.create({
         color: 'red',
         textAlign: 'center',
         fontSize: 22,
-        fontFamily: 'bold',
         paddingVertical: 8,
     },
 })
