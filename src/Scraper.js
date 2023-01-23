@@ -1,5 +1,7 @@
 const DEBUG_WEB_ID = "L98110TQ-GJE-UP1"
 
+import { Platform } from "react-native";
+
 export async function scrapeRides(webId) {
     const authCookies = await getAuthCookies();
     const headers = Object.assign({}, authCookies);
@@ -39,10 +41,10 @@ const getUserMetadata = async (requestHeaders, webId) => {
         if (webIdResponse.status === 422) {
             throw new Error('Invalid Web Id, please re-enter it and try again.');
         }
-        throw new Error(`Request to alta.com failed with error 
-                        code ${webIdResponse.status}
-                        Maybe the server is down or you aren't connected
-                        to the internet?`);
+        throw new Error('Request to alta.com failed with error ' +
+                        `code ${webIdResponse.status}. ` +
+                        "Maybe the server is down or you aren't connected " +
+                        'to the internet?');
     }
     return webIdResponse;
 }
@@ -64,10 +66,11 @@ const getCookiesFromResponseHeader = responseHeader => {
             altaSessionCookie = cookieData;
         }
     }
-    return {
-        Cookie: xsrfCookie + '; ' + altaSessionCookie,
-        'X-XSRF-TOKEN': xsrfToken,
-    };
+    const cookies = {'X-XSRF-TOKEN': xsrfToken};
+    if (Platform.OS !== 'ios') {
+        cookies['Cookie'] = xsrfCookie + '; ' + altaSessionCookie
+    }
+    return cookies;
 };
 
 const getCSRFToken = response => {
@@ -97,6 +100,7 @@ const getRideData = async (
         body: JSON.stringify(rideRequestBody),
     });
     if (ridesResponse.status !== 200) {
+        console.log("rides data failed");
         throw new Error(`Request to alta.com failed with error 
                         code ${ridesResponse.status}
                         Maybe the server is down or you aren't connected
