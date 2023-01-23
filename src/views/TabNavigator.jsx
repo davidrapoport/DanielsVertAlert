@@ -25,7 +25,7 @@ function TabNavigator({
                             iconName = 'snow-outline';
                         } else if (route.name === 'Settings') {
                             iconName = 'settings-outline';
-                        } else if (route.name === 'Donut') {
+                        } else if (route.name === 'Doughnut') {
                             iconName = 'pie-chart-outline';
                         } else if (route.name === 'Vert Charts') {
                             iconName = 'trending-up-outline';
@@ -49,7 +49,7 @@ function TabNavigator({
                             refreshControl={refreshControl} />;
                     }}
                 </Tab.Screen>
-                <Tab.Screen name="Donut" >
+                <Tab.Screen name="Doughnut" >
                     {(props) => {
                         return <DonutView {...props}
                             ridesData={rideData}
