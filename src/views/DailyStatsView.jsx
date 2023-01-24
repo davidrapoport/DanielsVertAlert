@@ -8,10 +8,10 @@ function DailyStatsView({ ridesData, lastRefreshTime, refreshControl }) {
         return <ActivityIndicator size={'large'} />
     }
     return <ScrollView style={{ flexDirection: 'column' }}>
-        <DailyRides ridesData={ridesData}
+        {/* <DailyRides ridesData={ridesData}
             lastRefreshTime={lastRefreshTime}
             refreshControl={refreshControl}
-        />
+        /> */}
         <SummaryTable ridesData={ridesData} />
     </ScrollView>
 }

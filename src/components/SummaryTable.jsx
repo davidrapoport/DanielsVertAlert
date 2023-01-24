@@ -9,7 +9,9 @@ import {
     getNumRestDays,
     getVertLastSevenDays,
     getVertSinceMonday,
-    getNumRidesPerLift
+    getNumRidesPerLift,
+    getMeanVert,
+    getMedianVert
 } from "../RideUtils";
 
 const SummaryTable = ({ ridesData }) => {
@@ -30,6 +32,8 @@ const SummaryTable = ({ ridesData }) => {
         ['Best Streak:', getBestStreak(ridesData) + ' day(s)'],
         ['Vert Last 7 Days:', getVertLastSevenDays(ridesData) + ' feet'],
         ['Vert Since Monday:', getVertSinceMonday(ridesData) + ' feet'],
+        ['Average daily vert:', getMeanVert(ridesData).toLocaleString() + ' feet'],
+        ['Median daily vert:', getMedianVert(ridesData).toLocaleString() + ' feet'],
         ["Times You've Cucked:", numMidloads],
         ["Biggest Day:", biggestDay.vert.toLocaleString() + ' feet'],
         ["Date of Biggest Day:", biggestDay.date],

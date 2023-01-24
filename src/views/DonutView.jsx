@@ -85,7 +85,7 @@ function pickHeaderText(numRidesPerLift) {
         if (percentages['Sugarloaf'] > 0.1) {
             headerOptions.push("You know you can ski Around The World from Collins right?");
             headerOptions.push("I love dodging people on Rollercoaster too");
-            headerOptions.push("")
+            headerOptions.push("It's okay we all have to start somewhere")
         }
     }
     if ('Sunnyside' in numRidesPerLift) {

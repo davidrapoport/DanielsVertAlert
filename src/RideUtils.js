@@ -163,6 +163,23 @@ export const getVertSinceMonday = ridesData => {
     return totalVert;
 }
 
+export const getMeanVert = ridesData => {
+    const seasonVert = ridesData.reduce((acc,
+        { totalVert }) => { return acc + totalVert }, 0);
+    return Math.floor(seasonVert / ridesData.length);
+}
+
+export const getMedianVert = ridesData => {
+    ridesData.sort((a, b) => {
+        if (a.totalVert < b.totalVert) {
+            return 1;
+        } else if (a.totalVert > b.totalVert) {
+            return -1;
+        }
+    });
+    return ridesData[Math.floor(ridesData.length / 2)].totalVert;
+}
+
 export const getCurrentDateInFormat = () => {
     const date = new Date();
     const dateString = new Date(date.getTime() - date.getTimezoneOffset() * 60000)
