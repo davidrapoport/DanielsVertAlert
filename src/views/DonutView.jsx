@@ -68,6 +68,7 @@ function pickHeaderText(numRidesPerLift) {
             headerOptions.push("So we beat on, boats against the current, borne back ceaselessy into Collins");
             headerOptions.push("Tell me, what is it you plan to do with your one wild and precious life? It better be riding Collins");
             headerOptions.push("I'm a pessimist because of snowfall, but an optimist because of Aggie's");
+            headerOptions.push("The road goes ever on and on, down from the Collins where it began");
         }
     }
     if ('Supreme' in numRidesPerLift) {
@@ -92,6 +93,7 @@ function pickHeaderText(numRidesPerLift) {
         headerOptions.push("I wish I had 5 friends to ride Sunnyside with");
         headerOptions.push("The Vail Ridge Double is Alta's Freeride line");
         headerOptions.push("Do you live in East Alta? Why are you skiing Sunnyside?");
+        headerOptions.push("December must've been rough without Sunnyside open");
     }
     // Round time to nearest 5 min mark as a seed to avoid this refreshing too much.
     const seed = Math.floor(Date.now() / (1000 * 60 * 5)) * 1000 * 60 * 5;
