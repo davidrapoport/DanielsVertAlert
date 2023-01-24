@@ -51,7 +51,6 @@ const RidesPieChart = ({ numRidesPerLift }) => {
 
     return (
         <ScrollView style={styles.container}>
-            <Text style={styles.h2}>Are you skiing Collins enough?</Text>
             <View style={styles.labels}>{labels}</View>
             <PieChart
                 style={{ height: 200 }}
@@ -71,10 +70,6 @@ const styles = StyleSheet.create({
     container: {
         flex: 1,
         paddingTop: 22
-    },
-    h2: {
-        paddingBottom: 12,
-        ...material.headline,
     },
     labels: {
         paddingTop: 8,

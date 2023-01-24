@@ -18,9 +18,6 @@ const LiftBreakdownTable = ({ numRidesPerLift }) => {
 
     return (
         <ScrollView style={styles.container}>
-            <Text style={styles.h2}>
-                You better not be skiing Supreme
-            </Text>
             <ScrollView style={styles.table}>
                 <View style={styles.tr}>
                     <Text style={styles.th}>Lift Name</Text>
@@ -37,10 +34,6 @@ const styles = StyleSheet.create({
     container: {
         flex: 1,
         paddingTop: 22
-    },
-    h2: {
-        paddingBottom: 12,
-        ...material.headline,
     },
     td: {
         borderWidth: 1,
