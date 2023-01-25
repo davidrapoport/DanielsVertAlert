@@ -9,8 +9,8 @@ export const ALTA_RED = '#C4332E';
 export const GlobalStyles = StyleSheet.create({
     scrollViewContainer: {
         flex: 1,
-        marginLeft: 8,
-        marginRight: 8,
+        marginLeft: 16,
+        marginRight: 16,
     },
     viewContainer: {
         flex: 1,

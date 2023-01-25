@@ -1,4 +1,4 @@
-import { Text, ScrollView } from "react-native";
+import { Text, ScrollView, View } from "react-native";
 
 import RidesPieChart from "../components/RidesPieChart";
 import LiftBreakdownTable from "../components/LiftBreakdownTable";
@@ -47,10 +47,11 @@ function pickHeaderText(numRidesPerLift) {
             headerOptions.push("Thirds and Aggie's, what else do you need?");
             headerOptions.push("You better not be skiing Supreme");
             headerOptions.push("Are you skiing Collins enough?");
-        } else {
+        }
+        if (percentages['Collins'] <= 0.98) {
             headerOptions.push("Ask not what Collins can do for you, but what you can do for Collins");
             headerOptions.push("I think therefore I Collins");
-            headerOptions.push("Collins is the opium of the masses");
+            headerOptions.push("Collins is the opiate of the masses");
             headerOptions.push("A Collins for a Collins makes the whole world blind");
             headerOptions.push("Shoot for the moon, if you fall you'll land on Collins");
             headerOptions.push("To Collins or not to Collins, that is the question");
@@ -108,11 +109,16 @@ const DonutView = ({ ridesData, refreshControl }) => {
     let colorCommentary = pickHeaderText(numRidesPerLift);
     return (
         <ScrollView style={GlobalStyles.scrollViewContainer} refreshControl={refreshControl}>
-            <Text style={GlobalStyles.h1}>
-                Your Doughnut
-            </Text>
-            <Text style={GlobalStyles.h2}>{colorCommentary}</Text>
-            <RidesPieChart numRidesPerLift={numRidesPerLift} />
+            <View style={{
+                alignItems: 'center',
+                justifyContent: 'center',
+            }}>
+                <Text style={GlobalStyles.h1}>
+                    Your Doughnut
+                </Text>
+                <Text style={GlobalStyles.h2}>{colorCommentary}</Text>
+                <RidesPieChart numRidesPerLift={numRidesPerLift} />
+            </View>
             <LiftBreakdownTable numRidesPerLift={numRidesPerLift} />
         </ScrollView>
     )
