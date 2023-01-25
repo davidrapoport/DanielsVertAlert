@@ -10,9 +10,11 @@ function DailyRides({ ridesData, refreshControl, lastRefreshTime, footerComponen
     ridesDataToRender = [ridesData[0]];
     if (ridesDataToRender[0].date !== getCurrentDateInFormat()) {
         return (
-            <ScrollView style={GlobalStyles.scrollViewContainer} >
-                <View style={{ flexDirection: 'row' }}>
-                    <View style={styles.emptyContainer} refreshControl={refreshControl}>
+            <ScrollView style={GlobalStyles.scrollViewContainer}
+                refreshControl={refreshControl}
+                showsVerticalScrollIndicator={false} >
+                <View style={{ flexDirection: 'row', flex: 1 }}>
+                    <View style={styles.emptyContainer} >
                         <Text style={styles.noRideMessage}>
                             No rides yet today... What, are you interlodged?
                             {' '} Or do you just like getting paid $600 a month
@@ -20,8 +22,8 @@ function DailyRides({ ridesData, refreshControl, lastRefreshTime, footerComponen
                         </Text>
                     </View>
                 </View>
-                {footerComponent}
-            </ScrollView>
+                <View style={{ flex: 1 }}>{footerComponent}</View>
+            </ScrollView >
         )
     }
     return <HistoricRidesView
@@ -48,6 +50,7 @@ const styles = StyleSheet.create({
         alignItems: 'center',
         marginHorizontal: 22,
         marginTop: 48,
+        paddingBottom: 64,
     },
     noRideMessage: {
         textAlign: 'center',

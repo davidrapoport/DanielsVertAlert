@@ -50,7 +50,7 @@ const RidesPieChart = ({ numRidesPerLift }) => {
     }
 
     return (
-        <ScrollView style={styles.container}>
+        <ScrollView style={styles.container} showsVerticalScrollIndicator={false}>
             <View style={styles.labels}>{labels}</View>
             <PieChart
                 style={{ height: 200 }}
