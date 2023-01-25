@@ -1,5 +1,6 @@
 import { View, Text, SectionList, StyleSheet } from "react-native";
 import { sortDescending } from "../RideUtils";
+import { GlobalStyles } from "../GlobalStyles";
 import { material } from "react-native-typography";
 
 const formatDate = (dateString) => {
@@ -12,7 +13,8 @@ const HistoricRidesView = ({
     ridesData,
     lastRefreshTime,
     refreshControl,
-    headerComponent }) => {
+    headerComponent,
+    footerComponent, }) => {
     ridesData = sortDescending(ridesData);
     const sections = [];
     ridesData.forEach(rides => {
@@ -24,7 +26,7 @@ const HistoricRidesView = ({
         })
     })
     return (
-        <View style={styles.container}>
+        <View style={GlobalStyles.viewContainer}>
             <SectionList
                 sections={sections}
                 renderItem={({ item, index }) => <RideView ride={item} index={index} />}
@@ -32,6 +34,7 @@ const HistoricRidesView = ({
                 keyExtractor={(item) => `basicListEntry-${item.timestamp}`}
                 refreshControl={refreshControl}
                 ListHeaderComponent={headerComponent}
+                ListFooterComponent={footerComponent}
             />
         </View>
     )
@@ -55,7 +58,7 @@ const RideView = ({ ride, index }) => {
     }
     const time = `${newHour}:${split[1]} ${modifier}`;
     return (
-        <View style={index === 0 ? styles.firstRowContainer : styles.rowContainer} >
+        <View style={index === 0 ? { ...styles.rowContainer, borderTopWidth: 1 } : styles.rowContainer} >
             <Text style={styles.liftName}>{ride.lift}</Text>
             <Text style={styles.time}> {time}</Text>
             <Text style={styles.vert}>{ride.vert}</Text>
@@ -63,11 +66,6 @@ const RideView = ({ ride, index }) => {
 }
 
 const styles = StyleSheet.create({
-    container: {
-        flex: 1,
-        paddingTop: 22,
-        marginHorizontal: 8,
-    },
     sectionHeader: {
         paddingTop: 12,
         paddingRight: 10,
@@ -78,13 +76,6 @@ const styles = StyleSheet.create({
         flex: 1,
         borderWidth: 1,
         borderTopWidth: 0,
-        alignItems: 'stretch',
-        justifyContent: 'space-evenly',
-        flexDirection: "row",
-    },
-    firstRowContainer: {
-        flex: 1,
-        borderWidth: 1,
         alignItems: 'stretch',
         justifyContent: 'space-evenly',
         flexDirection: "row",

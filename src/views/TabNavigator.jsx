@@ -8,6 +8,7 @@ import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityI
 import VertCharts from '../components/VertCharts';
 import DailyStatsView from './DailyStatsView';
 import DonutView from './DonutView';
+import { ALTA_RED } from '../GlobalStyles';
 
 const Tab = createBottomTabNavigator();
 
@@ -30,7 +31,7 @@ function TabNavigator({
                             iconName = 'settings-outline';
                         } else if (route.name === 'Doughnut') {
                             icon = <MaterialCommunityIcons name="chart-donut" size={size} color={color} />
-                        } else if (route.name === 'Vert Charts') {
+                        } else if (route.name === 'Vert Chart') {
                             iconName = 'trending-up-outline';
                         } else if (route.name === 'All Rides') {
                             iconName = 'layers-outline';
@@ -40,10 +41,10 @@ function TabNavigator({
                         }
                         return <Ionicons name={iconName} size={size} color={color} />;
                     },
-                    tabBarActiveTintColor: '#C4332E',
+                    tabBarActiveTintColor: ALTA_RED,
                     tabBarInactiveTintColor: 'gray',
                     headerStyle: {
-                        backgroundColor: '#C4332E',
+                        backgroundColor: ALTA_RED,
                     },
                     headerTintColor: '#fff',
                 })}>
@@ -62,7 +63,7 @@ function TabNavigator({
                             refreshControl={refreshControl} />
                     }}
                 </Tab.Screen>
-                <Tab.Screen name="Vert Charts" >
+                <Tab.Screen name="Vert Chart" >
                     {(props) => {
                         return <VertCharts {...props}
                             ridesData={rideData}

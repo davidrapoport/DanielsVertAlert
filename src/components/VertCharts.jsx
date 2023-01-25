@@ -1,22 +1,19 @@
 import { isAfter, isSameDay } from "date-fns";
 import { addDays } from "date-fns/esm";
-import { useState } from "react";
-import { View, Text, Switch, StyleSheet } from "react-native"
+import { View, Text } from "react-native"
 import { Grid, BarChart, XAxis, YAxis } from 'react-native-svg-charts'
-import { material } from "react-native-typography";
 import { convertStringToLocalDate, getCurrentDateAlta, sortAscending } from "../RideUtils";
+import { GlobalStyles, ALTA_RED } from "../GlobalStyles";
 
 
 function VertCharts({ ridesData, refreshControl }) {
-    const [isCumulativeView, setIsCumulativeView] = useState(false);
-    const toggleSwitch = () => setIsCumulativeView(previousState => !previousState);
 
     return (
-        <View style={styles.container} refreshControl={refreshControl}>
-            <Text style={{ ...material.display2, paddingBottom: 12 }}>
+        <View style={GlobalStyles.viewContainer} refreshControl={refreshControl}>
+            <Text style={GlobalStyles.h1}>
                 How's Yer Vert?
             </Text>
-            <Text style={styles.chartHeader}>Vert Per Week</Text>
+            <Text style={{ ...GlobalStyles.h2, marginTop: 24 }}>Vert Per Week</Text>
             <WeeklyViewChart ridesData={ridesData} />
         </View>
     );
@@ -52,6 +49,9 @@ function WeeklyViewChart({ ridesData }) {
         dayCounter++;
         currentDate = addDays(currentDate, 1);
     }
+    if (labels.length !== data.length) {
+        data.push(weekTotal);
+    }
     const axesSvg = { fontSize: 10, fill: 'grey' };
     const xAxesSvg = Object.assign({ rotation: 90, translateY: 20 }, axesSvg);
     const verticalContentInset = { top: 15, bottom: 15 }
@@ -79,7 +79,7 @@ function WeeklyViewChart({ ridesData }) {
                     gridMax={gridMax}
                     numberOfTicks={numberOfTicks}
                     contentInset={verticalContentInset}
-                    svg={{ stroke: 'rgb(244, 81, 30)', fill: 'rgb(244, 81, 30)' }}
+                    svg={{ stroke: ALTA_RED, fill: ALTA_RED }}
                 >
                     <Grid />
                 </BarChart>
@@ -159,18 +159,5 @@ function CumulativeViewChart({ ridesData }) {
         </View>
     )
 }
-
-const styles = StyleSheet.create({
-    container: {
-        flex: 1,
-        alignItems: 'center',
-        justifyContent: 'center',
-    },
-    chartHeader: {
-        marginTop: 25,
-        ...material.headline,
-    },
-});
-
 
 export default VertCharts

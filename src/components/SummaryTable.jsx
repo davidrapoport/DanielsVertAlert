@@ -1,6 +1,5 @@
 import { View, Text, StyleSheet } from "react-native";
 
-import { material } from "react-native-typography";
 import {
     getCurrentStreak,
     getBestStreak,
@@ -13,6 +12,7 @@ import {
     getMeanVert,
     getMedianVert
 } from "../RideUtils";
+import { GlobalStyles } from "../GlobalStyles";
 
 const SummaryTable = ({ ridesData }) => {
     const numRidesPerLift = getNumRidesPerLift(ridesData);
@@ -44,16 +44,16 @@ const SummaryTable = ({ ridesData }) => {
     }
 
     return (
-        <View>
-            <Text style={styles.h2}>
-                At a glance
+        <View style={styles.container}>
+            <Text style={GlobalStyles.h1}>
+                Your Season Stats
             </Text>
             <View style={{ flexDirection: 'column' }}>
                 {labelsValues.map(labelValue => {
                     return (
-                        <View style={styles.tr} key={labelValue[0]}>
-                            <Text style={{ marginRight: 12, fontWeight: 'bold' }}>{labelValue[0]} </Text>
-                            <Text>{labelValue[1]} </Text>
+                        <View style={GlobalStyles.bubble} key={labelValue[0]}>
+                            <Text style={{ marginRight: 12, fontWeight: 'bold', color: 'white' }}>{labelValue[0]} </Text>
+                            <Text style={{ color: 'white' }}>{labelValue[1]} </Text>
                         </View>)
                 })}
             </View>
@@ -61,12 +61,11 @@ const SummaryTable = ({ ridesData }) => {
 }
 
 const styles = StyleSheet.create({
-    h2: {
-        paddingBottom: 12,
-        ...material.headline,
-    },
-    tr: {
-        flexDirection: "row",
+    container: {
+        marginTop: 16,
+        paddingTop: 16,
+        borderTopColor: 'black',
+        borderTopWidth: 1,
     },
 });
 
