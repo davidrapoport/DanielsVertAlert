@@ -108,7 +108,7 @@ const DonutView = ({ ridesData, refreshControl }) => {
     const numRidesPerLift = getNumRidesPerLift(ridesData);
     let colorCommentary = pickHeaderText(numRidesPerLift);
     return (
-        <ScrollView style={GlobalStyles.scrollViewContainer} refreshControl={refreshControl}>
+        <ScrollView style={GlobalStyles.scrollViewContainer} refreshControl={refreshControl} contentInset={{right: -16}}>
             <View style={{
                 alignItems: 'center',
                 justifyContent: 'center',

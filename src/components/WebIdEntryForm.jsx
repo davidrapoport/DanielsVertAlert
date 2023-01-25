@@ -1,4 +1,4 @@
-import { Button, TextInput, View, Text, StyleSheet, Image } from "react-native";
+import { Button, TextInput, View, Text, StyleSheet, Image, KeyboardAvoidingView } from "react-native";
 
 import { useRef, useState } from "react";
 import { material } from "react-native-typography";
@@ -52,19 +52,21 @@ const WebIdEntryForm = ({ savedWebId, handleUpdateWebId }) => {
     return (
         <View style={GlobalStyles.viewContainer}>
             <Image source={require('../img/Alta_logo_dropshadow.jpg')} />
-            <Text style={GlobalStyles.h3}>Enter your Alta Web Id to get started</Text>
-            <Text style={{ paddingBottom: 12, ...material.body1 }}>
-                Your Web Id can be found at the bottom of your season pass
-            </Text>
-            {error && <Text style={GlobalStyles.errorMessage}>{error}</Text>}
-            <TextInput
-                style={styles.input}
-                defaultValue={webId}
-                onChangeText={changeText}
-                autoCorrect={false}
-                ref={inputRef}>
-            </TextInput>
-            <Button onPress={onClickUpdateWebId} title="Check my Vert"></Button>
+            <KeyboardAvoidingView behavior={Platform.OS === 'ios' ? 'padding' : 'height'}>
+                <Text style={GlobalStyles.h3}>Enter your Alta Web Id to get started</Text>
+                <Text style={{ paddingBottom: 12, ...material.body1 }}>
+                    Your Web Id can be found at the bottom of your season pass
+                </Text>
+                {error && <Text style={GlobalStyles.errorMessage}>{error}</Text>}
+                <TextInput
+                    style={styles.input}
+                    defaultValue={webId}
+                    onChangeText={changeText}
+                    autoCorrect={false}
+                    ref={inputRef}>
+                </TextInput>
+                <Button onPress={onClickUpdateWebId} title="Check my Vert"></Button>
+            </KeyboardAvoidingView>
         </View>
     );
 }

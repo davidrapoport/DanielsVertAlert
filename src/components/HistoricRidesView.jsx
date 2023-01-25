@@ -35,6 +35,8 @@ const HistoricRidesView = ({
                 refreshControl={refreshControl}
                 ListHeaderComponent={headerComponent}
                 ListFooterComponent={footerComponent}
+                stickySectionHeadersEnabled={false}
+                contentInset={{right: -16}}
             />
         </View>
     )
