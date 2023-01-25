@@ -56,7 +56,7 @@ function App() {
     };
     const interval = setInterval(async () => {
       await pollRideData();
-    }, 60 * 1000);
+    }, 15 * 1000);
     return () => {
       clearInterval(interval);
     };

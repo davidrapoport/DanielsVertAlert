@@ -44,7 +44,7 @@ const WebIdEntryForm = ({ savedWebId, handleUpdateWebId }) => {
         return (
             <View style={GlobalStyles.viewContainer}>
                 <Image source={require('../img/Alta_logo_dropshadow.jpg')} />
-                <Button style={styles.button} onPress={clearWebId} title={title}></Button>
+                <Button onPress={clearWebId} title={title}></Button>
             </View>
         )
     }
@@ -76,6 +76,8 @@ const styles = StyleSheet.create({
         padding: 20,
         borderRadius: 9,
         marginBottom: 12,
+        marginHorizontal: 12,
+        alignSelf: 'stretch',
     },
 })
 

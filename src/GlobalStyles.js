@@ -12,12 +12,14 @@ export const GlobalStyles = StyleSheet.create({
         paddingTop: 22,
         marginLeft: 8,
         marginRight: 8,
+        marginBottom: 16,
     },
     viewContainer: {
         flex: 1,
         paddingTop: 22,
         marginLeft: 8,
         marginRight: 8,
+        marginBottom: 16,
         alignItems: 'center',
         justifyContent: 'center',
     },
@@ -32,9 +34,6 @@ export const GlobalStyles = StyleSheet.create({
     },
     h3: {
         ...material.title,
-    },
-    button: {
-
     },
     errorMessage: {
         color: 'red',
