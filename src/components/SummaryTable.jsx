@@ -44,7 +44,7 @@ const SummaryTable = ({ ridesData }) => {
     }
 
     return (
-        <View style={styles.container}>
+        <View style={{ ...styles.container, paddingBottom: 16, }}>
             <Text style={GlobalStyles.h1}>
                 Your Season Stats
             </Text>

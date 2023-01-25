@@ -9,21 +9,18 @@ export const ALTA_RED = '#C4332E';
 export const GlobalStyles = StyleSheet.create({
     scrollViewContainer: {
         flex: 1,
-        paddingTop: 22,
         marginLeft: 8,
         marginRight: 8,
-        marginBottom: 16,
     },
     viewContainer: {
         flex: 1,
-        paddingTop: 22,
         marginLeft: 8,
         marginRight: 8,
-        marginBottom: 16,
         alignItems: 'center',
         justifyContent: 'center',
     },
     h1: {
+        paddingTop: 22,
         paddingBottom: 12,
         ...material.display2,
         color: ALTA_BLUE,
