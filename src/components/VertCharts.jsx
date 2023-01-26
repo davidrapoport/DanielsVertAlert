@@ -31,7 +31,7 @@ function WeeklyViewChart({ ridesData }) {
     while (!isAfter(currentDate, todaysDate)) {
         if (dayCounter % 7 === 0) {
             labels.push((currentDate.getMonth() + 1) + '/' +
-                (currentDate.getDate() + 1))
+                (currentDate.getDate()))
         }
         // It's possible we still have days to go to catch up to 'today'
         // But there aren't any more rides (ex. last 5 days have been rest days).
