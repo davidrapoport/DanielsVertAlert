@@ -1,6 +1,6 @@
 import { isAfter, isSameDay } from "date-fns";
 import { addDays } from "date-fns/esm";
-import { View, Text } from "react-native"
+import { ScrollView, View, Text } from "react-native"
 import { Grid, BarChart, XAxis, YAxis } from 'react-native-svg-charts'
 import { convertStringToLocalDate, getCurrentDateAlta, sortAscending } from "../RideUtils";
 import { GlobalStyles, ALTA_RED } from "../GlobalStyles";
@@ -9,13 +9,15 @@ import { GlobalStyles, ALTA_RED } from "../GlobalStyles";
 function VertCharts({ ridesData, refreshControl }) {
 
     return (
-        <View style={GlobalStyles.viewContainer} refreshControl={refreshControl}>
-            <Text style={GlobalStyles.h1}>
-                How's Yer Vert?
-            </Text>
-            <Text style={{ ...GlobalStyles.h2, marginTop: 24 }}>Vert Per Week</Text>
+        <ScrollView style={GlobalStyles.scrollViewContainer} refreshControl={refreshControl}>
+            <View style={{ alignItems: 'center', justifyContent: 'center' }}>
+                <Text style={GlobalStyles.h1}>
+                    How's Yer Vert?
+                </Text>
+                <Text style={{ ...GlobalStyles.h2, marginTop: 24 }}>Vert Per Week</Text>
+            </View>
             <WeeklyViewChart ridesData={ridesData} />
-        </View>
+        </ScrollView>
     );
 };
 
