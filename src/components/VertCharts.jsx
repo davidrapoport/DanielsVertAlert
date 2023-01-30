@@ -93,7 +93,8 @@ function WeeklyViewChart({ ridesData }) {
                     }}
                     data={data}
                     formatLabel={(value, index) => labels[index]}
-                    contentInset={{ left: 35, right: 35 }}
+                    // TODO: Dynamically xompute based on num weeks??
+                    contentInset={{ left: 25, right: 10 }}
                     numberOfTicks={labels.length}
                     svg={xAxesSvg}
                 />
