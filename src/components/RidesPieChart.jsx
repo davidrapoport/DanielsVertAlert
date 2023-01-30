@@ -77,13 +77,15 @@ const styles = StyleSheet.create({
     },
     labelContainer: {
         flex: 1,
+        flexWrap: 'wrap',
         alignItems: "stretch",
         justifyContent: "flex-start",
         flexDirection: "row",
     },
     labelText: {
         paddingLeft: 20,
-        width: '50%',
+        flexWrap: 'wrap',
+        flexShrink: 1,
         ...material.subheading,
     }
 });

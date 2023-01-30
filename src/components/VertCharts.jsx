@@ -1,6 +1,6 @@
 import { isAfter, isSameDay } from "date-fns";
 import { addDays } from "date-fns/esm";
-import { View, Text } from "react-native"
+import { ScrollView, View, Text, Dimensions } from "react-native"
 import { Grid, BarChart, XAxis, YAxis } from 'react-native-svg-charts'
 import { convertStringToLocalDate, getCurrentDateAlta, sortAscending } from "../RideUtils";
 import { GlobalStyles, ALTA_RED } from "../GlobalStyles";
@@ -9,15 +9,15 @@ import { GlobalStyles, ALTA_RED } from "../GlobalStyles";
 function VertCharts({ ridesData, refreshControl }) {
 
     return (
-        <View style={GlobalStyles.scrollViewContainer} refreshControl={refreshControl}>
-            <View style={{ alignItems: 'center', justifyContent: 'center' }}>
+        <ScrollView style={GlobalStyles.scrollViewContainer} refreshControl={refreshControl}>
+            <View style={{ alignItems: 'center', justifyContent: 'center', flex:1}}>
                 <Text style={GlobalStyles.h1}>
                     How's Yer Vert?
                 </Text>
                 <Text style={{ ...GlobalStyles.h2, marginTop: 24 }}>Vert Per Week</Text>
             </View>
             <WeeklyViewChart ridesData={ridesData} />
-        </View>
+        </ScrollView>
     );
 };
 
@@ -54,6 +54,7 @@ function WeeklyViewChart({ ridesData }) {
     if (labels.length !== data.length) {
         data.push(weekTotal);
     }
+    const height = Dimensions.get('window').height;
     const axesSvg = { fontSize: 10, fill: 'grey' };
     const xAxesSvg = Object.assign({ rotation: 90, translateY: 20 }, axesSvg);
     const verticalContentInset = { top: 15, bottom: 15 }
@@ -62,7 +63,7 @@ function WeeklyViewChart({ ridesData }) {
     const numberOfTicks = Math.ceil(gridMax / 10000);
     const xAxisHeight = 100
     return (
-        <View style={{ height: '80%', padding: 20, flexDirection: 'row' }}>
+        <View style={{ height: height * 0.8, padding: 20, flexDirection: 'row' }}>
             <YAxis
                 data={data}
                 style={{ marginBottom: xAxisHeight }}

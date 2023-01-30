@@ -85,22 +85,22 @@ const styles = StyleSheet.create({
     },
     time: {
         flex: 1,
+        flexWrap: 'wrap',
         paddingVertical: 10,
         paddingRight: 10,
-        height: 44,
         ...material.body1Object,
     },
     vert: {
         flex: 1,
+        flexWrap: 'wrap',
         paddingVertical: 10,
-        height: 44,
         ...material.body1Object,
     },
     liftName: {
         flex: 2,
+        flexWrap: 'wrap',
         paddingVertical: 9,
         paddingLeft: 10,
-        height: 44,
         ...material.body1Object,
     },
 });
