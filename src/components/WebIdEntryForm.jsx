@@ -54,7 +54,7 @@ const WebIdEntryForm = ({ savedWebId, handleUpdateWebId }) => {
             <View style={GlobalStyles.viewContainer}>
                 <Image source={require('../img/Alta_logo_dropshadow.jpg')} />
                 <Text style={GlobalStyles.h3}>Enter your Alta Web Id to get started</Text>
-                <Text style={{ paddingBottom: 12, ...material.body1 }}>
+                <Text style={{ paddingBottom: 12, ...material.body1, marginHorizontal: 12 }}>
                     Your Web Id can be found at the bottom of your season pass
                 </Text>
                 {error && <Text style={GlobalStyles.errorMessage}>{error}</Text>}

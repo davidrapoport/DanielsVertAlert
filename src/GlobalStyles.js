@@ -60,6 +60,8 @@ export const GlobalStyles = StyleSheet.create({
     },
     bubble: {
         flexDirection: "row",
+        flexShrink: 1,
+        flexWrap: 'wrap',
         borderColor: "#323582",
         borderWidth: 2,
         borderRadius: 4,

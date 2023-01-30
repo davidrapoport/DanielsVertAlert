@@ -12,7 +12,9 @@ function DailyRides({ ridesData, refreshControl, lastRefreshTime, footerComponen
         return (
             <ScrollView style={GlobalStyles.scrollViewContainer}
                 refreshControl={refreshControl}
-                showsVerticalScrollIndicator={false} >
+                showsVerticalScrollIndicator={false}
+                horizontal={false}
+                directionalLockEnabled={true}>
                 <View style={{ flexDirection: 'row', flex: 1 }}>
                     <View style={styles.emptyContainer} >
                         <Text style={styles.noRideMessage}>
