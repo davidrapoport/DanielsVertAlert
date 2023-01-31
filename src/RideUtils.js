@@ -42,6 +42,18 @@ export const getFastestCollinsLap = ridesData => {
     return { 'fastestTime': fastestTimeString, 'fastestDate': fastestDate }
 }
 
+export const getBirdLaps = (ridesData) => {
+    const flattenedRides = [];
+    ridesData.forEach(
+        daysRides => daysRides.rides.forEach(
+            ride => flattenedRides.push(ride)));
+    const birdRides = flattenedRides.filter(ride => ride.isSnowBird);
+    if (!birdRides) {
+        return null;
+    }
+    return { 'numLaps': birdRides.length, 'vert': birdRides.reduce((acc, { vert }) => vert + acc, 0) };
+}
+
 export const getBiggestDay = (ridesData) => {
     ridesData.sort((a, b) => {
         if (a.totalVert < b.totalVert) {

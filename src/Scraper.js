@@ -2,6 +2,8 @@ const DEBUG_WEB_ID = "L98110TQ-GJE-UP1"
 
 import { Platform } from "react-native";
 
+import { isSnowBirdLift, getSnowBirdLiftName, getSnowBirdVert } from "./SnowbirdUtils";
+
 export async function scrapeRides(webId) {
     const authCookies = await getAuthCookies();
     const headers = Object.assign({}, authCookies);
@@ -42,9 +44,9 @@ const getUserMetadata = async (requestHeaders, webId) => {
             throw new Error('Invalid Web Id, please re-enter it and try again.');
         }
         throw new Error('Request to alta.com failed with error ' +
-                        `code ${webIdResponse.status}. ` +
-                        "Maybe the server is down or you aren't connected " +
-                        'to the internet?');
+            `code ${webIdResponse.status}. ` +
+            "Maybe the server is down or you aren't connected " +
+            'to the internet?');
     }
     return webIdResponse;
 }
@@ -66,7 +68,7 @@ const getCookiesFromResponseHeader = responseHeader => {
             altaSessionCookie = cookieData;
         }
     }
-    const cookies = {'X-XSRF-TOKEN': xsrfToken};
+    const cookies = { 'X-XSRF-TOKEN': xsrfToken };
     if (Platform.OS !== 'ios') {
         cookies['Cookie'] = xsrfCookie + '; ' + altaSessionCookie
     }
@@ -119,19 +121,44 @@ const parseRides = ridesJson => {
             return;
         }
 
+        let parsedRides = daysRides.map(ride => {
+            const rideData = {
+                date: ride.SZDATEOFRIDE,
+                isSnowBird: isSnowBirdLift(ride.SZPOENAME),
+                time: ride.SZTIMEOFRIDE,
+                timestamp: ride.SZDATEOFRIDE + 'T' + ride.SZTIMEOFRIDE,
+            }
+            if (isSnowBirdLift(ride.SZPOENAME)) {
+                Object.assign(rideData, {
+                    vert: getSnowBirdVert(ride.SZPOENAME),
+                    lift: getSnowBirdLiftName(ride.SZPOENAME),
+                    isSnowBird: true
+                })
+            } else {
+                Object.assign(rideData, {
+                    vert: ride.NVERTICALFEET,
+                    lift: ride.SZPOENAME,
+                    isSnowBird: false
+                })
+            }
+            return rideData;
+        })
+        parsedRides = filterOutSugarPass(parsedRides);
+
         parsed.push({
             date: daysRides[0].SZDATEOFRIDE,
-            totalVert: daysRides[0].total,
-            rides: daysRides.map(ride => {
-                return {
-                    date: ride.SZDATEOFRIDE,
-                    vert: ride.NVERTICALFEET,
-                    time: ride.SZTIMEOFRIDE,
-                    lift: ride.SZPOENAME,
-                    timestamp: ride.SZDATEOFRIDE + 'T' + ride.SZTIMEOFRIDE,
-                };
-            })
+            totalVert: getDaysVert(parsedRides),
+            rides: parsedRides
         });
     });
     return parsed;
 };
+
+const filterOutSugarPass = rides => {
+    return rides.filter(ride => !ride.lift.startsWith('Sugar Pass'));
+}
+
+const getDaysVert = rides => {
+    return rides.reduce((acc,
+        { vert }) => { return parseInt(vert) + acc }, 0);
+}

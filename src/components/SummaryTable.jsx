@@ -10,7 +10,8 @@ import {
     getVertSinceMonday,
     getNumRidesPerLift,
     getMeanVert,
-    getMedianVert
+    getMedianVert,
+    getBirdLaps,
 } from "../RideUtils";
 import { GlobalStyles } from "../GlobalStyles";
 
@@ -22,6 +23,7 @@ const SummaryTable = ({ ridesData }) => {
         (acc, laps) => { return acc + laps }, 0);
     const numMidloads = 'Collins Angle' in numRidesPerLift ? numRidesPerLift['Collins Angle'] : 0;
     const fastestCollinsTime = getFastestCollinsLap(ridesData);
+    const birdLaps = getBirdLaps(ridesData);
     const biggestDay = getBiggestDay(ridesData);
     const labelsValues = [
         ['Laps:', numLaps],
@@ -41,6 +43,10 @@ const SummaryTable = ({ ridesData }) => {
     if (fastestCollinsTime) {
         labelsValues.push(['Fastest Collins Lap:', fastestCollinsTime.fastestTime]);
         labelsValues.push(['Date of Fastest Collins Lap:', fastestCollinsTime.fastestDate]);
+    }
+    if (birdLaps) {
+        labelsValues.splice(2, 0, ['SnowBird Laps', birdLaps.numLaps]);
+        labelsValues.splice(3, 0, ['SnowBird Vert', birdLaps.vert.toLocaleString() + ' feet']);
     }
 
     return (
