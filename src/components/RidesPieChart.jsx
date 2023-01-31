@@ -12,7 +12,11 @@ const getColorFromLift = name => {
         'Supreme': '#1D1D1D',
         'Sunnyside': '#E9F809',
         'Albion': '#09F8DF',
-        'Collins Angle': '#F809C9'
+        'Collins Angle': '#F809C9',
+        'Tram': '#fc7b0a',
+        'Gad Zoom': '#fcec0a',
+        'Mineral Basin': '#0ab2fa',
+        'Peruvian': '#11451e',
     }
     if (name in liftToColor) {
         return liftToColor[name];
