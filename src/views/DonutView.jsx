@@ -63,12 +63,15 @@ function pickHeaderText(numRidesPerLift) {
             headerOptions.push("Do not go gently into that good Aggies");
             headerOptions.push("All that glitters is gold. Only shooting stars ski Collins");
             headerOptions.push("Never gonna give Collins up, never gonna let Collins down");
-            headerOptions.push("Turning and turning in the widening Corkscrew. " +
+            headerOptions.push("Turning and turning in the widening Schnina's. " +
                 "The ski schooler cannot hear the instructor. The center cannot hold. Collins falls apart");
             headerOptions.push("So we beat on, boats against the current, borne back ceaselessy into Collins");
             headerOptions.push("Tell me, what is it you plan to do with your one wild and precious life? It better be riding Collins");
             headerOptions.push("I'm a pessimist because of snowfall, but an optimist because of Aggie's");
             headerOptions.push("The road goes ever on and on, down from the Collins where it began");
+            headerOptions.push("It was the best of Collins, it was the worst of Corkscrew");
+            headerOptions.push("It is a truth universally acknowledged, that a single man in " +
+                "possession of a good fortune, must be in want of a lap on Collins")
         }
     }
     if ('Supreme' in numRidesPerLift) {
