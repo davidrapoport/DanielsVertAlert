@@ -77,9 +77,10 @@ function generateBadges(ridesData) {
         }
         if (key === 'Midloads') {
             if (!('Collins Angle' in numRidesPerLift)) {
-                return;
+                value = 0;
+            } else {
+                value = numRidesPerLift['Collins Angle'];
             }
-            value = numRidesPerLift['Collins Angle'];
             comparator = compareGT;
         }
         if (key === 'FastestLap') {
