@@ -99,6 +99,7 @@ function generateBadges(ridesData) {
             comparator = compareGT;
         }
         badges.push(<BadgeView title={title}
+            id={key}
             value={value}
             comparator={comparator}
             checkPoints={checkPoints}
@@ -108,7 +109,7 @@ function generateBadges(ridesData) {
     return badges;
 }
 
-function BadgeView({ title, value, comparator, checkPoints, toString }) {
+function BadgeView({ title, id, value, comparator, checkPoints, toString }) {
     let i = 0;
     while (i < 3 && comparator(value, checkPoints[i])) {
         i++;
@@ -120,7 +121,11 @@ function BadgeView({ title, value, comparator, checkPoints, toString }) {
     }
     else if (i === 3) {
         badge = GOLD_BADGE;
-        text = `Congrats! You're at ${toString(value)}! You'd make Evs proud`
+        let person = "Evs";
+        if (id === 'Midloads') {
+            person = "your wife's boyfriend";
+        }
+        text = `Congrats! You're at ${toString(value)}! You'd make ${person} proud`
     } else {
         badge = BADGES[i - 1];
         const next = i === 1 ? 'silver.' : 'gold.';
