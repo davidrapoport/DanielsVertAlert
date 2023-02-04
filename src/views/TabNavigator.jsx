@@ -69,8 +69,7 @@ function TabNavigator({
                 <Tab.Screen name="Goals" >
                     {(props) => {
                         return <GoalsView {...props}
-                            ridesData={rideData}
-                            refreshControl={refreshControl} />
+                            ridesData={rideData} />
                     }}
                 </Tab.Screen>
                 <Tab.Screen name="Vert Chart" >
