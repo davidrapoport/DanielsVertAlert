@@ -17,6 +17,7 @@ const getColorFromLift = name => {
         'Gad Zoom': '#fcec0a',
         'Mineral Basin': '#0ab2fa',
         'Peruvian': '#11451e',
+        'Chickadee': '#4b4a61',
     }
     if (name in liftToColor) {
         return liftToColor[name];
