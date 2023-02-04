@@ -3,7 +3,7 @@ import { addDays } from "date-fns/esm";
 import { View, Text, StyleSheet } from "react-native";
 import * as Progress from 'react-native-progress';
 import { material } from "react-native-typography";
-import { GlobalStyles } from "../GlobalStyles";
+import { ALTA_BLUE, GlobalStyles } from "../GlobalStyles";
 import { getCurrentDateAlta, getMeanVert, getNumRestDays } from "../RideUtils";
 
 function SeasonVertProgressBar({ goalVert, ridesData }) {
@@ -29,7 +29,7 @@ function SeasonVertProgressBar({ goalVert, ridesData }) {
     const projectedVert = skiRatio * daysLeft * meanVert + seasonVert;
     const percentMet = Math.min(seasonVert / Math.max(goalVert, 1), 1);
     let text = "You're skiing " + Math.round(skiRatio * 100) + "% of the days and averaging " +
-        meanVert.toLocaleString() + " feet a day wtih " + daysLeft + " days left in the season.";
+        meanVert.toLocaleString() + " feet a day with " + daysLeft + " days left in the season.";
     if (percentMet === 1) {
         text = "Congrats, you've met your season vert goal. Now get back to work."
     } else if (projectedVert >= goalVert) {
@@ -49,11 +49,9 @@ function SeasonVertProgressBar({ goalVert, ridesData }) {
             Your Vert Goal: {goalVert.toLocaleString()} feet
         </Text>
         <View style={{ paddingVertical: 16, flexDirection: "row", alignItems: "center" }}>
-            <Progress.Bar progress={percentMet}
-                color={GlobalStyles.ALTA_BLUE}
-                borderColor={GlobalStyles.ALTA_BLUE} />
+            <Progress.Bar progress={percentMet} height={12} />
         </View>
-        <Text style={style.text}>{text}</Text>
+        <Text style={{ ...style.text, color: ALTA_BLUE }}>{text}</Text>
     </View >;
 }
 
