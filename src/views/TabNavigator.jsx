@@ -8,6 +8,7 @@ import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityI
 import VertCharts from '../components/VertCharts';
 import DailyStatsView from './DailyStatsView';
 import DonutView from './DonutView';
+import GoalsView from './GoalsView';
 import { ALTA_RED } from '../GlobalStyles';
 
 const Tab = createBottomTabNavigator();
@@ -35,6 +36,8 @@ function TabNavigator({
                             iconName = 'trending-up-outline';
                         } else if (route.name === 'All Rides') {
                             iconName = 'layers-outline';
+                        } else if (route.name === 'Goals') {
+                            iconName = 'shield-checkmark-outline';
                         }
                         if (icon) {
                             return icon;
@@ -59,6 +62,13 @@ function TabNavigator({
                 <Tab.Screen name="Doughnut" >
                     {(props) => {
                         return <DonutView {...props}
+                            ridesData={rideData}
+                            refreshControl={refreshControl} />
+                    }}
+                </Tab.Screen>
+                <Tab.Screen name="Goals" >
+                    {(props) => {
+                        return <GoalsView {...props}
                             ridesData={rideData}
                             refreshControl={refreshControl} />
                     }}
