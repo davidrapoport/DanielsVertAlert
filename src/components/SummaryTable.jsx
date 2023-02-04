@@ -14,6 +14,8 @@ import {
     getBirdLaps,
 } from "../RideUtils";
 import { GlobalStyles } from "../GlobalStyles";
+import { material } from "react-native-typography";
+import { getSnowbirdLifts } from "../SnowbirdUtils";
 
 const SummaryTable = ({ ridesData }) => {
     const numRidesPerLift = getNumRidesPerLift(ridesData);
@@ -44,16 +46,26 @@ const SummaryTable = ({ ridesData }) => {
         labelsValues.push(['Fastest Collins Lap:', fastestCollinsTime.fastestTime]);
         labelsValues.push(['Date of Fastest Collins Lap:', fastestCollinsTime.fastestDate]);
     }
+    let disclaimer;
     if (birdLaps) {
-        labelsValues.splice(2, 0, ['SnowBird Laps', birdLaps.numLaps]);
-        labelsValues.splice(3, 0, ['SnowBird Vert', birdLaps.vert.toLocaleString() + ' feet']);
+        labelsValues.splice(2, 0, ['SnowBird Laps *', birdLaps.numLaps]);
+        labelsValues.splice(3, 0, ['SnowBird Vert *', birdLaps.vert.toLocaleString() + ' feet']);
+        const birdLifts = getSnowbirdLifts();
+        const birdLiftsString = birdLifts.slice(0, -1).join(", ") + ', and ' + birdLifts.slice(-1);
+        disclaimer = (
+            <Text style={{ ...material.subheading, flexWrap: 'wrap', paddingTop: 12 }}>
+                * Unfortunately at Snowbird only {birdLiftsString} report their scans so
+                your vert data may be incomplete.
+            </Text>);
     }
 
     return (
         <View style={{ ...styles.container, paddingBottom: 16, }}>
-            <Text style={GlobalStyles.h1}>
-                Your Season Stats
-            </Text>
+            <View style={{ flexDirection: 'row' }}>
+                <Text style={GlobalStyles.h1}>
+                    Your Season Stats
+                </Text>
+            </View>
             <View style={{ flexDirection: 'column' }}>
                 {labelsValues.map(labelValue => {
                     return (
@@ -62,6 +74,7 @@ const SummaryTable = ({ ridesData }) => {
                             <Text style={{ color: 'white' }}>{labelValue[1]} </Text>
                         </View>)
                 })}
+                {disclaimer}
             </View>
         </View >)
 }
