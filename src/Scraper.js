@@ -136,7 +136,7 @@ const parseRides = ridesJson => {
                 })
             } else {
                 Object.assign(rideData, {
-                    vert: ride.NVERTICALFEET,
+                    vert: ride.NVERTICALFEET ?? 0,
                     lift: ride.SZPOENAME,
                     isSnowBird: false
                 })
