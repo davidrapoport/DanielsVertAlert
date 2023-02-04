@@ -91,7 +91,10 @@ function App() {
     try {
       rides = await scrapeRides(storedWebId);
     } catch (thrownError) {
-      await clearAllData();
+      // Only clear all the data if this is the first attempt to load data.
+      if (!rideData) {
+        await clearAllData();
+      }
       setIsRefreshing(false);
       showMessage({ message: thrownError.message, type: 'danger', duration: 5000 });
       return;
