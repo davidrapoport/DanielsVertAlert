@@ -39,7 +39,7 @@ export const getFastestCollinsLap = ridesData => {
         return null;
     }
     const fastestTimeString = `${Math.floor(fastestTime / 60)} minutes and ${fastestTime % 60} seconds`;
-    return { 'fastestTime': fastestTimeString, 'fastestDate': fastestDate }
+    return { 'fastestTime': fastestTimeString, 'fastestDate': fastestDate, 'fastestTimeSec': fastestTime }
 }
 
 export const getBirdLaps = (ridesData) => {
@@ -48,7 +48,7 @@ export const getBirdLaps = (ridesData) => {
         daysRides => daysRides.rides.forEach(
             ride => flattenedRides.push(ride)));
     const birdRides = flattenedRides.filter(ride => ride.isSnowBird);
-    if (!birdRides) {
+    if (!birdRides.length) {
         return null;
     }
     return { 'numLaps': birdRides.length, 'vert': birdRides.reduce((acc, { vert }) => vert + acc, 0) };
