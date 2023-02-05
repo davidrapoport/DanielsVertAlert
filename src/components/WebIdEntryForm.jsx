@@ -7,11 +7,6 @@ import { GlobalStyles } from "../GlobalStyles";
 const WebIdEntryForm = ({ savedWebId, handleUpdateWebId }) => {
     const [webId, setWebId] = useState("")
     const [error, setError] = useState("");
-    const clearWebId = () => {
-        setWebId("");
-        setError('');
-        handleUpdateWebId("");
-    }
 
     const inputRef = useRef(TextInput);
 
@@ -39,20 +34,10 @@ const WebIdEntryForm = ({ savedWebId, handleUpdateWebId }) => {
         setWebId(text);
     }
 
-    if (savedWebId && savedWebId.length > 0) {
-        const title = "Reset Web Id?"
-        return (
-            <View style={GlobalStyles.viewContainer}>
-                <Image source={require('../img/hipDownDaniel.jpg')} />
-                <Button onPress={clearWebId} title={title}></Button>
-            </View>
-        )
-    }
-
     return (
         <KeyboardAvoidingView behavior={Platform.OS === 'ios' ? 'padding' : 'height'}>
             <View style={GlobalStyles.viewContainer}>
-                <Image source={require('../img/hipDownDaniel.jpg')} />
+                <Image source={require('../img/hipDownDaniel.jpg')} style={{ width: '95%' }} />
                 <Text style={GlobalStyles.h3}>Enter your Alta Web Id to get started</Text>
                 <Text style={{ paddingBottom: 12, ...material.body1, marginHorizontal: 12 }}>
                     Your Web Id can be found at the bottom of your season pass

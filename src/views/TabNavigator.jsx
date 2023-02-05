@@ -1,6 +1,5 @@
 import { NavigationContainer } from '@react-navigation/native';
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
-import WebIdEntryForm from '../components/WebIdEntryForm';
 
 import Ionicons from 'react-native-vector-icons/Ionicons';
 import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons';
@@ -10,14 +9,14 @@ import DailyStatsView from './DailyStatsView';
 import DonutView from './DonutView';
 import GoalsView from './GoalsView';
 import { ALTA_RED } from '../GlobalStyles';
+import OverflowView from './OverflowView';
 
 const Tab = createBottomTabNavigator();
 
 function TabNavigator({
     rideData,
     refreshControl,
-    savedWebId,
-    handleUpdateWebId,
+    resetWebId,
     lastRefreshTime }) {
     return (
         <NavigationContainer>
@@ -28,8 +27,8 @@ function TabNavigator({
                         let icon;
                         if (route.name === 'Daily Stats') {
                             iconName = 'snow-outline';
-                        } else if (route.name === 'Settings') {
-                            iconName = 'settings-outline';
+                        } else if (route.name === 'See More') {
+                            iconName = 'ellipsis-horizontal-outline';
                         } else if (route.name === 'Doughnut') {
                             icon = <MaterialCommunityIcons name="chart-donut" size={size} color={color} />
                         } else if (route.name === 'Vert Chart') {
@@ -72,18 +71,12 @@ function TabNavigator({
                             ridesData={rideData} />
                     }}
                 </Tab.Screen>
-                <Tab.Screen name="Vert Chart" >
+                <Tab.Screen name="See More">
                     {(props) => {
-                        return <VertCharts {...props}
+                        return <OverflowView {...props}
+                            resetWebId={resetWebId}
                             ridesData={rideData}
-                            refreshControl={refreshControl} />
-                    }}
-                </Tab.Screen>
-                <Tab.Screen name="Settings">
-                    {(props) => {
-                        return <WebIdEntryForm {...props}
-                            savedWebId={savedWebId}
-                            handleUpdateWebId={handleUpdateWebId} />;
+                            refreshControl={refreshControl} />;
                     }}
                 </Tab.Screen>
             </Tab.Navigator>

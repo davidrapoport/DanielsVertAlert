@@ -10,11 +10,11 @@ function VertCharts({ ridesData, refreshControl }) {
 
     return (
         <ScrollView style={GlobalStyles.scrollViewContainer} refreshControl={refreshControl}>
-            <View style={{ alignItems: 'center', justifyContent: 'center', flex:1}}>
+            <View style={{ alignItems: 'center', justifyContent: 'center', flex: 1 }}>
                 <Text style={GlobalStyles.h1}>
                     How's Yer Vert?
                 </Text>
-                <Text style={{ ...GlobalStyles.h2, marginTop: 24 }}>Vert Per Week</Text>
+                <Text style={{ ...GlobalStyles.h2 }}>Vert Per Week</Text>
             </View>
             <WeeklyViewChart ridesData={ridesData} />
         </ScrollView>
@@ -54,7 +54,7 @@ function WeeklyViewChart({ ridesData }) {
     if (labels.length !== data.length) {
         data.push(weekTotal);
     }
-    const height = Dimensions.get('window').height;
+    const height = Dimensions.get('window').height - 100;
     const axesSvg = { fontSize: 10, fill: 'grey' };
     const xAxesSvg = Object.assign({ rotation: 90, translateY: 20 }, axesSvg);
     const verticalContentInset = { top: 15, bottom: 15 }

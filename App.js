@@ -140,7 +140,7 @@ function App() {
         rideData={rideData}
         refreshControl={refreshControl}
         savedWebId={webId}
-        handleUpdateWebId={handleUpdateWebId}
+        resetWebId={() => handleUpdateWebId('')}
         lastRefreshTime={lastRefreshTime} />
       <FlashMessage position={'top'} />
     </>

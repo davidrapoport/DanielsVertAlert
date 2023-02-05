@@ -11,7 +11,6 @@ const formatDate = (dateString) => {
 // Format of ridesData [{date, totalVert, rides[]}]
 const HistoricRidesView = ({
     ridesData,
-    lastRefreshTime,
     refreshControl,
     headerComponent,
     footerComponent, }) => {
@@ -36,7 +35,7 @@ const HistoricRidesView = ({
                 ListHeaderComponent={headerComponent}
                 ListFooterComponent={footerComponent}
                 stickySectionHeadersEnabled={false}
-                contentInset={{right: -16}}
+                contentInset={{ right: -16 }}
             />
         </View>
     )
