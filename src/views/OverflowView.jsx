@@ -23,12 +23,12 @@ function MainView({ resetWebId, navigation }) {
                 style={{ width: '95%' }} />
             <View style={styles.button}>
                 <Button
-                    onPress={() => navigation.navigate("Vert Chart")}
+                    onPress={() => navigation.navigate("All Rides")}
                     title={"See All Rides"}></Button>
             </View>
             <View style={styles.button}>
                 <Button
-                    onPress={() => navigation.navigate("All Rides")}
+                    onPress={() => navigation.navigate("Vert Chart")}
                     title={"Check out your weekly vert"}></Button>
             </View>
             <View style={styles.button}>
