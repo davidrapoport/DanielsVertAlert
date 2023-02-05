@@ -3,6 +3,7 @@ import AsyncStorage from '@react-native-async-storage/async-storage';
 const WEB_ID_KEY = '@WEB_ID_KEY';
 const RIDE_DATA_KEY = '@RIDE_DATA_KEY';
 const LAST_REFRESH_KEY = '@LAST_REFRESH_KEY';
+const VERT_GOAL_KEY = '@VERT_GOAL_KEY';
 
 export async function clearAllStoredData() {
     await AsyncStorage.removeItem(WEB_ID_KEY);
@@ -38,3 +39,13 @@ export async function getRideData() {
 export async function storeRideData(rideData) {
     return await AsyncStorage.setItem(RIDE_DATA_KEY, JSON.stringify(rideData));
 };
+
+export async function getVertGoal() {
+    const vertGoal = await AsyncStorage.getItem(VERT_GOAL_KEY);
+    return parseInt(vertGoal, 10) ?? 1e6;
+}
+
+export async function storeVertGoal(vertGoal) {
+    return await AsyncStorage.setItem(VERT_GOAL_KEY, "" + vertGoal);
+};
+

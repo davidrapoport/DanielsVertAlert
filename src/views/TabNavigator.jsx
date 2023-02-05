@@ -17,7 +17,9 @@ function TabNavigator({
     rideData,
     refreshControl,
     resetWebId,
-    lastRefreshTime }) {
+    lastRefreshTime,
+    vertGoal,
+    handleUpdateVertGoal }) {
     return (
         <NavigationContainer>
             <Tab.Navigator initialRouteName='Daily Stats'
@@ -68,7 +70,8 @@ function TabNavigator({
                 <Tab.Screen name="Goals" >
                     {(props) => {
                         return <GoalsView {...props}
-                            ridesData={rideData} />
+                            ridesData={rideData}
+                            vertGoal={vertGoal} />
                     }}
                 </Tab.Screen>
                 <Tab.Screen name="More">
@@ -76,7 +79,9 @@ function TabNavigator({
                         return <OverflowView {...props}
                             resetWebId={resetWebId}
                             ridesData={rideData}
-                            refreshControl={refreshControl} />;
+                            refreshControl={refreshControl}
+                            handleUpdateVertGoal={handleUpdateVertGoal}
+                            currentVertGoal={vertGoal} />;
                     }}
                 </Tab.Screen>
             </Tab.Navigator>

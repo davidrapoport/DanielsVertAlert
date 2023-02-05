@@ -1,13 +1,22 @@
-import { ScrollView, Text } from "react-native";
+import { ScrollView, View, Text } from "react-native";
 import SeasonVertProgressBar from "../components/SeasonVertProgressBar";
 import BadgesView from "../components/BadgeView";
 import { GlobalStyles } from "../GlobalStyles";
+import { ActivityIndicator } from "react-native";
 
-function GoalsView({ ridesData }) {
+function GoalsView({ ridesData, vertGoal }) {
+    if (!vertGoal) {
+        return <ActivityIndicator size={'large'} style={{ marginTop: 100 }} />;
+    }
     return (
         <ScrollView style={GlobalStyles.scrollViewContainer}>
-            <Text style={GlobalStyles.h1}>Your Season Goals</Text>
-            <SeasonVertProgressBar ridesData={ridesData} goalVert={2000000} />
+            <View style={{
+                alignItems: 'center',
+                justifyContent: 'center',
+            }}>
+                <Text style={GlobalStyles.h1}>Your Season Goals</Text>
+                <SeasonVertProgressBar ridesData={ridesData} goalVert={vertGoal} />
+            </View>
             <BadgesView ridesData={ridesData} />
         </ScrollView>
     );

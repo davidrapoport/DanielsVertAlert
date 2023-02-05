@@ -10,6 +10,8 @@ import {
   getRideData,
   storeRideData,
   clearAllStoredData,
+  getVertGoal,
+  storeVertGoal,
 } from './src/Storage';
 import TabNavigator from './src/views/TabNavigator';
 import WebIdEntryForm from './src/components/WebIdEntryForm';
@@ -19,6 +21,7 @@ function App() {
   const [webId, setWebId] = React.useState();
   const [rideData, setRideData] = React.useState();
   const [lastRefreshTime, setLastRefreshTime] = React.useState();
+  const [vertGoal, setVertGoal] = React.useState(1e6);
   const [isRefreshing, setIsRefreshing] = React.useState(false);
   const [isLoading, setIsLoading] = React.useState(true);
 
@@ -29,6 +32,7 @@ function App() {
       const savedWebId = await getWebId();
       const savedRefreshTime = await getLastRefreshTime();
       const savedRideData = await getRideData();
+      const savedVertGoal = await getVertGoal();
       if (savedWebId) {
         setWebId(savedWebId);
       }
@@ -37,6 +41,9 @@ function App() {
       }
       if (savedRideData) {
         setRideData(savedRideData);
+      }
+      if (savedVertGoal) {
+        setVertGoal(savedVertGoal);
       }
       setIsLoading(false);
     };
@@ -66,6 +73,7 @@ function App() {
     setRideData(null);
     setLastRefreshTime(null);
     setWebId(null);
+    setVertGoal(1e6);
     await clearAllStoredData();
   }
 
@@ -80,6 +88,11 @@ function App() {
     // Refresh the data with a new webId
     await handleRefresh();
   };
+
+  const handleUpdateVertGoal = async updatedVertGoal => {
+    setVertGoal(updatedVertGoal);
+    await storeVertGoal(updatedVertGoal);
+  }
 
   const handleRefresh = useCallback(async () => {
     setIsRefreshing(true);
@@ -141,7 +154,9 @@ function App() {
         refreshControl={refreshControl}
         savedWebId={webId}
         resetWebId={() => handleUpdateWebId('')}
-        lastRefreshTime={lastRefreshTime} />
+        lastRefreshTime={lastRefreshTime}
+        vertGoal={vertGoal}
+        handleUpdateVertGoal={handleUpdateVertGoal} />
       <FlashMessage position={'top'} />
     </>
   );
