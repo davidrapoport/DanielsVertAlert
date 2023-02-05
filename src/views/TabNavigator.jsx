@@ -27,7 +27,7 @@ function TabNavigator({
                         let icon;
                         if (route.name === 'Daily Stats') {
                             iconName = 'snow-outline';
-                        } else if (route.name === 'See More') {
+                        } else if (route.name === 'More') {
                             iconName = 'ellipsis-horizontal-outline';
                         } else if (route.name === 'Doughnut') {
                             icon = <MaterialCommunityIcons name="chart-donut" size={size} color={color} />
@@ -71,7 +71,7 @@ function TabNavigator({
                             ridesData={rideData} />
                     }}
                 </Tab.Screen>
-                <Tab.Screen name="See More">
+                <Tab.Screen name="More">
                     {(props) => {
                         return <OverflowView {...props}
                             resetWebId={resetWebId}
