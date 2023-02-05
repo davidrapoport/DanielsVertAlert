@@ -40,7 +40,8 @@ function SeasonVertProgressBar({ goalVert, ridesData }) {
             projectedFinishDay.toLocaleDateString() +
             ". Keep up the good work!"
     } else {
-        text += " At this rate, you won't meet your vert goal. You'd better start having" +
+        text += " At this rate, you won't meet your vert goal. You'll only get " +
+            Math.round(projectedVert).toLocaleString() + " feet by closing day. You'd better start having" +
             " your prep cooks make your soup for you."
     }
 
