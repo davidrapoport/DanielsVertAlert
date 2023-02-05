@@ -152,7 +152,7 @@ function BadgeView({ title, id, value, comparator, checkPoints, toString }) {
 }
 
 function BadgesView({ ridesData }) {
-    return <View style={{ paddingBottom: 16 }}>{generateBadges(ridesData)}</View>;
+    return <View style={{ paddingVertical: 16 }}>{generateBadges(ridesData)}</View>;
 }
 
 export default BadgesView;
