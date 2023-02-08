@@ -1,10 +1,10 @@
 import { NavigationContainer } from '@react-navigation/native';
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
+import { useNavigationContainerRef, StackActions } from '@react-navigation/native';
 
 import Ionicons from 'react-native-vector-icons/Ionicons';
 import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons';
 
-import VertCharts from '../components/VertCharts';
 import DailyStatsView from './DailyStatsView';
 import DonutView from './DonutView';
 import GoalsView from './GoalsView';
@@ -20,8 +20,18 @@ function TabNavigator({
     lastRefreshTime,
     vertGoal,
     handleUpdateVertGoal }) {
+    const stackNavigationContainerRef = useNavigationContainerRef();
     return (
-        <NavigationContainer>
+        <NavigationContainer
+            // All this junk is there so that any Stack that gets popped on from
+            // within the 'More' Tab gets cleared once the user clicks on a different tab
+            onStateChange={(state) => {
+                if (!stackNavigationContainerRef.current ||
+                    stackNavigationContainerRef.getCurrentRoute().name === 'Main') {
+                    return;
+                }
+                stackNavigationContainerRef.dispatch(StackActions.popToTop());
+            }}>
             <Tab.Navigator initialRouteName='Daily Stats'
                 screenOptions={({ route }) => ({
                     tabBarIcon: ({ focused, color, size }) => {
@@ -81,7 +91,8 @@ function TabNavigator({
                             ridesData={rideData}
                             refreshControl={refreshControl}
                             handleUpdateVertGoal={handleUpdateVertGoal}
-                            currentVertGoal={vertGoal} />;
+                            currentVertGoal={vertGoal}
+                            stackNavigationContainerRef={stackNavigationContainerRef} />;
                     }}
                 </Tab.Screen>
             </Tab.Navigator>

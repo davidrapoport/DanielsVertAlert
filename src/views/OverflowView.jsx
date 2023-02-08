@@ -81,9 +81,11 @@ function MainView({ resetWebId, handleUpdateVertGoal, currentVertGoal, navigatio
     )
 }
 
-function OverflowView({ resetWebId, ridesData, refreshControl, handleUpdateVertGoal, currentVertGoal }) {
+function OverflowView({ resetWebId, ridesData,
+    refreshControl, handleUpdateVertGoal,
+    currentVertGoal, stackNavigationContainerRef }) {
     return (
-        <NavigationContainer independent={true}>
+        <NavigationContainer independent={true} ref={stackNavigationContainerRef}>
             <Stack.Navigator initialRouteName="Main">
                 <Stack.Screen name="Main" options={{ headerShown: false }}>
                     {(props) => {
