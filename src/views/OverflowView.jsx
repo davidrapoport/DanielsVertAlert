@@ -25,7 +25,6 @@ function MainView({ resetWebId, handleUpdateVertGoal, currentVertGoal, navigatio
             return;
         }
         handleUpdateVertGoal(parsedVert);
-        inputRef.current.clear();
         showMessage({ message: "Your Vert Goal has been updated", type: "success", duration: 3000 })
     }
     function handleTextInput(text) {
@@ -55,6 +54,7 @@ function MainView({ resetWebId, handleUpdateVertGoal, currentVertGoal, navigatio
                     }}
                     textAlign='center'
                     value={newVert}
+                    defaultValue={newVert}
                     onChangeText={handleTextInput}
                     autoCorrect={false}
                     ref={inputRef}></TextInput>
