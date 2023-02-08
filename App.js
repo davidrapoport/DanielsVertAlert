@@ -105,7 +105,8 @@ function App() {
       rides = await scrapeRides(storedWebId);
     } catch (thrownError) {
       // Only clear all the data if this is the first attempt to load data.
-      if (!rideData) {
+      const storedRideData = await getRideData();
+      if (!rideData && !storedRideData) {
         await clearAllData();
       }
       setIsRefreshing(false);
