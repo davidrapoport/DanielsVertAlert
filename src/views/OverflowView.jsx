@@ -14,18 +14,22 @@ import { showMessage } from "react-native-flash-message";
 const Stack = createNativeStackNavigator();
 
 function MainView({ resetWebId, handleUpdateVertGoal, currentVertGoal, navigation }) {
-    const [newVert, setNewVert] = React.useState(currentVertGoal);
+    const [newVert, setNewVert] = React.useState(currentVertGoal.toLocaleString());
     const inputRef = React.useRef(TextInput);
     function handleVertPress() {
         const parsedVert = parseInt(newVert.replaceAll(',', ''));
         if (parsedVert < 0 || isNaN(parsedVert)) {
             showMessage({ message: "Please enter a better Vert Goal", type: 'warning', duration: 5000 });
-            setNewVert(currentVertGoal);
+            setNewVert(currentVertGoal.toLocaleString());
+            inputRef.current.clear();
             return;
         }
         handleUpdateVertGoal(parsedVert);
         inputRef.current.clear();
         showMessage({ message: "Your Vert Goal has been updated", type: "success", duration: 3000 })
+    }
+    function handleTextInput(text) {
+        setNewVert(text.toLocaleString());
     }
     return (
         <ScrollView style={GlobalStyles.scrollViewContainer}
@@ -50,8 +54,8 @@ function MainView({ resetWebId, handleUpdateVertGoal, currentVertGoal, navigatio
                         borderRadius: 3, marginBottom: 12
                     }}
                     textAlign='center'
-                    defaultValue={newVert.toLocaleString()}
-                    onChangeText={setNewVert}
+                    value={newVert}
+                    onChangeText={handleTextInput}
                     autoCorrect={false}
                     ref={inputRef}></TextInput>
                 <Button
