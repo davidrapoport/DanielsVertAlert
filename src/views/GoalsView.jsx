@@ -4,7 +4,7 @@ import BadgesView from "../components/BadgeView";
 import { GlobalStyles } from "../GlobalStyles";
 import { ActivityIndicator } from "react-native";
 
-function GoalsView({ ridesData, vertGoal }) {
+function GoalsView({ ridesData, vertGoal, navigation }) {
     if (!vertGoal) {
         return <ActivityIndicator size={'large'} style={{ marginTop: 100 }} />;
     }
@@ -15,7 +15,7 @@ function GoalsView({ ridesData, vertGoal }) {
                 justifyContent: 'center',
             }}>
                 <Text style={GlobalStyles.h1}>Your Season Goals</Text>
-                <SeasonVertProgressBar ridesData={ridesData} goalVert={vertGoal} />
+                <SeasonVertProgressBar ridesData={ridesData} goalVert={vertGoal} navigation={navigation} />
             </View>
             <BadgesView ridesData={ridesData} />
         </ScrollView>

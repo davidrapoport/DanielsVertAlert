@@ -23,7 +23,6 @@ function MainView({ resetWebId, handleUpdateVertGoal, currentVertGoal, navigatio
             setNewVert(currentVertGoal);
             return;
         }
-        console.log(parsedVert);
         handleUpdateVertGoal(parsedVert);
         inputRef.current.clear();
         showMessage({ message: "Your Vert Goal has been updated", type: "success", duration: 3000 })
