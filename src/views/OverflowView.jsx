@@ -10,6 +10,7 @@ import VertCharts from "../components/VertCharts";
 import HistoricRidesView from "../components/HistoricRidesView";
 import { TextInput } from "react-native";
 import { showMessage } from "react-native-flash-message";
+import VertDistributionChart from "../components/VertDistributionChart";
 
 const Stack = createNativeStackNavigator();
 
@@ -74,6 +75,11 @@ function MainView({ resetWebId, handleUpdateVertGoal, currentVertGoal, navigatio
             </View>
             <View style={styles.button}>
                 <Button
+                    onPress={() => navigation.navigate("Vert Distribution")}
+                    title={"Check out how much vert you ski per day"}></Button>
+            </View>
+            <View style={styles.button}>
+                <Button
                     onPress={resetWebId}
                     title={"Reset Web Id"}></Button>
             </View>
@@ -98,6 +104,12 @@ function OverflowView({ resetWebId, ridesData,
                 <Stack.Screen name="Vert Chart">
                     {(props) => {
                         return <VertCharts {...props}
+                            ridesData={ridesData} refreshControl={refreshControl} />
+                    }}
+                </Stack.Screen>
+                <Stack.Screen name="Vert Distribution">
+                    {(props) => {
+                        return <VertDistributionChart {...props}
                             ridesData={ridesData} refreshControl={refreshControl} />
                     }}
                 </Stack.Screen>
