@@ -1,16 +1,18 @@
 import BackgroundFetch from 'react-native-background-fetch';
-import { getWebId, getLastRefreshTime, storeRideData, storeLastRefreshTime, getNotificationStatus, storeNotificationStatus } from './Storage';
+import { getWebId, getLastRefreshTime, storeRideData, storeLastRefreshTime, getNotificationStatus, storeNotificationStatus, getRideData } from './Storage';
 import { shouldScrapeRides, } from './ScraperController';
 import { scrapeRides } from './Scraper';
 import notifee from '@notifee/react-native';
 import { Alert } from 'react-native';
+import { sortDescending } from './RideUtils';
 
 export async function initBackgroundFetch() {
     const onEvent = async (taskId) => {
         console.log('[BackgroundFetch] task: ', taskId);
         const storedWebId = await getWebId();
         const storedLastRefreshTime = await getLastRefreshTime();
-        if (!storedWebId || !storedLastRefreshTime) {
+        const storedRides = await getRideData();
+        if (!storedWebId || !storedLastRefreshTime || !storedRides) {
             console.log("[BackgroundFetch] Attempted to run background task but " +
                 "stored data was empty " + `webId: ${storedWebId} refreshTime ${storeLastRefreshTime}`);
         } else if (!(await shouldScrapeRides())) {
@@ -21,9 +23,10 @@ export async function initBackgroundFetch() {
                 const date = new Date();
                 await storeLastRefreshTime(date);
                 await storeRideData(rides);
-                const message = "[BackgroundFetch] Succeeded at " + date.toISOString() + " with " + rides
-                console.log(message);
-                await displayNotification("Vert Alert!", message);
+                console.log("[BackgroundFetch] Succeeded at " + date.toISOString() + " with " + rides);
+                if (passedDailyVertThreshold(storedRides, rides)) {
+                    await displayNotification("Vert Alert!", "Congrats! You've hit 20k vert. Time to go home.");
+                }
             } catch (thrownError) {
                 console.error("[BackgroundFetch] fetch failed with " + thrownError.message);
             }
@@ -44,6 +47,19 @@ export async function initBackgroundFetch() {
         },
         onEvent, onTimeout);
     console.log('[BackgroundFetch] configure status: ', status);
+}
+
+export function passedDailyVertThreshold(oldRides, newRides) {
+    if (oldRides.length !== newRides.length) {
+        return false;
+    }
+    if (!oldRides.length) {
+        return false;
+    }
+    const oldVert = sortDescending(oldRides)[0].totalVert;
+    const newVert = sortDescending(newRides)[0].totalVert;
+    const VERT_THRESHOLD = 20000;
+    return oldVert < VERT_THRESHOLD && newVert > VERT_THRESHOLD;
 }
 
 export async function displayNotification(title, body) {

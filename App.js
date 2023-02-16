@@ -1,5 +1,10 @@
 import React, { useCallback, useEffect } from 'react';
-import { StyleSheet, View, RefreshControl, ActivityIndicator } from 'react-native';
+import {
+  StyleSheet,
+  View,
+  RefreshControl,
+  ActivityIndicator,
+} from 'react-native';
 import { scrapeRides } from './src/Scraper';
 import { shouldScrapeRides } from './src/ScraperController';
 import {
@@ -16,7 +21,11 @@ import {
 import TabNavigator from './src/views/TabNavigator';
 import WebIdEntryForm from './src/components/WebIdEntryForm';
 import FlashMessage, { showMessage } from 'react-native-flash-message';
-import { initBackgroundFetch, requestNotificationPermission } from './src/BackgroundProcessing';
+import {
+  initBackgroundFetch,
+  passedDailyVertThreshold,
+  requestNotificationPermission,
+} from './src/BackgroundProcessing';
 
 function App() {
   const [webId, setWebId] = React.useState();
@@ -54,8 +63,8 @@ function App() {
   }, []);
 
   useEffect(() => {
-    // Set a timer to poll data every 5 minutes when the app 
-    // is in the foreground. Headless calls will be used for 
+    // Set a timer to poll data every 5 minutes when the app
+    // is in the foreground. Headless calls will be used for
     // background sync.
     const pollRideData = async () => {
       // Should scrape rides ensures that refreshes don't happen
@@ -78,7 +87,7 @@ function App() {
     setWebId(null);
     setVertGoal(1e6);
     await clearAllStoredData();
-  }
+  };
 
   const handleUpdateWebId = async updatedWebId => {
     setWebId(updatedWebId);
@@ -95,7 +104,7 @@ function App() {
   const handleUpdateVertGoal = async updatedVertGoal => {
     setVertGoal(updatedVertGoal);
     await storeVertGoal(updatedVertGoal);
-  }
+  };
 
   const handleRefresh = useCallback(async () => {
     setIsRefreshing(true);
@@ -103,17 +112,21 @@ function App() {
     // TODO fix race condition causing you to have to read this from storage
     // instead of ReactState.
     const storedWebId = await getWebId();
+    const storedRides = await getRideData();
     let rides;
     try {
       rides = await scrapeRides(storedWebId);
     } catch (thrownError) {
       // Only clear all the data if this is the first attempt to load data.
-      const storedRideData = await getRideData();
-      if (!rideData && !storedRideData) {
+      if (!rideData && !storedRides) {
         await clearAllData();
       }
       setIsRefreshing(false);
-      showMessage({ message: thrownError.message, type: 'danger', duration: 5000 });
+      showMessage({
+        message: thrownError.message,
+        type: 'danger',
+        duration: 5000,
+      });
       return;
     }
     const refreshTime = new Date();
@@ -124,6 +137,13 @@ function App() {
     await storeRideData(rides);
 
     setIsRefreshing(false);
+    if (passedDailyVertThreshold(storedRides, rides)) {
+      showMessage({
+        message: 'Congrats! You passed 20k feet for the day. Now go home',
+        type: 'success',
+        duration: 5000,
+      });
+    }
   }, []);
 
   const refreshControl = (
@@ -142,10 +162,13 @@ function App() {
   if (!webId) {
     return (
       <View style={styles.container}>
-        <WebIdEntryForm savedWebId={webId} handleUpdateWebId={handleUpdateWebId} />
+        <WebIdEntryForm
+          savedWebId={webId}
+          handleUpdateWebId={handleUpdateWebId}
+        />
         <FlashMessage position={'top'} />
       </View>
-    )
+    );
   }
 
   // TODO what does a season pass with no rides look like from the API?
@@ -160,7 +183,8 @@ function App() {
         resetWebId={() => handleUpdateWebId('')}
         lastRefreshTime={lastRefreshTime}
         vertGoal={vertGoal}
-        handleUpdateVertGoal={handleUpdateVertGoal} />
+        handleUpdateVertGoal={handleUpdateVertGoal}
+      />
       <FlashMessage position={'top'} />
     </>
   );
