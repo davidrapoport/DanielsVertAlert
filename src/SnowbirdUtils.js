@@ -13,35 +13,34 @@ const CHICKADEE_VERT = 149;
 // Unfortunately I only know people who ski these 5 lifts.
 // Also not all snowbird lifts have scanners.
 const SNOWBIRD_LIFTS = {
-    'Mineral Basin': { name: 'Mineral Basin', vert: MINERAL_BASIN_VERT },
-    'Gad Zoom Quad': { name: 'Gad Zoom', vert: GADZOOM_VERT },
-    'Peruvian Quad': { name: 'Peruvian', vert: PERUVIAN_VERT },
-    'Tram': { name: 'Tram', vert: TRAM_VERT },
-    'Chickadee Double': { name: 'Chickadee', vert: CHICKADEE_VERT },
-}
-
+  'Mineral Basin': {name: 'Mineral Basin', vert: MINERAL_BASIN_VERT},
+  'Gad Zoom Quad': {name: 'Gad Zoom', vert: GADZOOM_VERT},
+  'Peruvian Quad': {name: 'Peruvian', vert: PERUVIAN_VERT},
+  Tram: {name: 'Tram', vert: TRAM_VERT},
+  'Chickadee Double': {name: 'Chickadee', vert: CHICKADEE_VERT},
+};
 
 export const getSnowbirdLifts = () => {
-    return Object.values(SNOWBIRD_LIFTS).map((val) => val.name);
-}
+  return Object.values(SNOWBIRD_LIFTS).map(val => val.name);
+};
 
-export const getSnowBirdLiftName = (liftName) => {
-    if (liftName in SNOWBIRD_LIFTS) {
-        return SNOWBIRD_LIFTS[liftName].name;
-    }
-    return "UNKNOWN BIRD LIFT";
-}
+export const getSnowBirdLiftName = liftName => {
+  if (liftName in SNOWBIRD_LIFTS) {
+    return SNOWBIRD_LIFTS[liftName].name;
+  }
+  return 'UNKNOWN BIRD LIFT';
+};
 
-export const getSnowBirdVert = (liftName) => {
-    if (liftName in SNOWBIRD_LIFTS) {
-        return SNOWBIRD_LIFTS[liftName].vert;
-    }
-    return 0;
-}
+export const getSnowBirdVert = liftName => {
+  if (liftName in SNOWBIRD_LIFTS) {
+    return SNOWBIRD_LIFTS[liftName].vert;
+  }
+  return 0;
+};
 
-export const isSnowBirdLift = (liftName) => {
-    if (liftName in SNOWBIRD_LIFTS) {
-        return true;
-    }
-    return false;
-}
+export const isSnowBirdLift = liftName => {
+  if (liftName in SNOWBIRD_LIFTS) {
+    return true;
+  }
+  return false;
+};

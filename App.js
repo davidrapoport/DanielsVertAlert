@@ -109,8 +109,6 @@ function App() {
   const handleRefresh = useCallback(async () => {
     setIsRefreshing(true);
 
-    // TODO fix race condition causing you to have to read this from storage
-    // instead of ReactState.
     const storedWebId = await getWebId();
     const storedRides = await getRideData();
     let rides;
@@ -118,7 +116,7 @@ function App() {
       rides = await scrapeRides(storedWebId);
     } catch (thrownError) {
       // Only clear all the data if this is the first attempt to load data.
-      if (!rideData && !storedRides) {
+      if (!storedRides) {
         await clearAllData();
       }
       setIsRefreshing(false);

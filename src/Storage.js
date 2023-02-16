@@ -7,55 +7,60 @@ const VERT_GOAL_KEY = '@VERT_GOAL_KEY';
 const NOTIFICATION_KEY = '@NOTIFICATION_KEY';
 
 export async function clearAllStoredData() {
-    await AsyncStorage.removeItem(WEB_ID_KEY);
-    await AsyncStorage.removeItem(RIDE_DATA_KEY);
-    await AsyncStorage.removeItem(LAST_REFRESH_KEY);
+  await AsyncStorage.removeItem(WEB_ID_KEY);
+  await AsyncStorage.removeItem(RIDE_DATA_KEY);
+  await AsyncStorage.removeItem(LAST_REFRESH_KEY);
 }
 
 export async function getWebId() {
-    return await AsyncStorage.getItem(WEB_ID_KEY);
+  return await AsyncStorage.getItem(WEB_ID_KEY);
 }
 
 export async function storeWebId(webId) {
-    return await AsyncStorage.setItem(WEB_ID_KEY, webId);
+  return await AsyncStorage.setItem(WEB_ID_KEY, webId);
 }
 
 export async function getLastRefreshTime() {
-    const refreshTime = await AsyncStorage.getItem(LAST_REFRESH_KEY);
-    if (refreshTime === null) {
-        return null;
-    }
-    return new Date(JSON.parse(refreshTime));
+  const refreshTime = await AsyncStorage.getItem(LAST_REFRESH_KEY);
+  if (refreshTime === null) {
+    return null;
+  }
+  return new Date(JSON.parse(refreshTime));
 }
 
 export async function storeLastRefreshTime(refreshTime) {
-    return await AsyncStorage.setItem(LAST_REFRESH_KEY, JSON.stringify(refreshTime));
-};
+  return await AsyncStorage.setItem(
+    LAST_REFRESH_KEY,
+    JSON.stringify(refreshTime),
+  );
+}
 
 export async function getRideData() {
-    const rideData = await AsyncStorage.getItem(RIDE_DATA_KEY);
-    return rideData != null ? JSON.parse(rideData) : null;
+  const rideData = await AsyncStorage.getItem(RIDE_DATA_KEY);
+  return rideData != null ? JSON.parse(rideData) : null;
 }
 
 export async function storeRideData(rideData) {
-    return await AsyncStorage.setItem(RIDE_DATA_KEY, JSON.stringify(rideData));
-};
+  return await AsyncStorage.setItem(RIDE_DATA_KEY, JSON.stringify(rideData));
+}
 
 export async function getVertGoal() {
-    const vertGoal = await AsyncStorage.getItem(VERT_GOAL_KEY);
-    return parseInt(vertGoal, 10) ?? 1e6;
+  const vertGoal = await AsyncStorage.getItem(VERT_GOAL_KEY);
+  return parseInt(vertGoal, 10) ?? 1e6;
 }
 
 export async function storeVertGoal(vertGoal) {
-    return await AsyncStorage.setItem(VERT_GOAL_KEY, "" + vertGoal);
-};
+  return await AsyncStorage.setItem(VERT_GOAL_KEY, '' + vertGoal);
+}
 
 export async function getNotificationStatus() {
-    const notif = await AsyncStorage.getItem(NOTIFICATION_KEY);
-    return notif === 'true';
+  const notif = await AsyncStorage.getItem(NOTIFICATION_KEY);
+  return notif === 'true';
 }
 
 export async function storeNotificationStatus(notificationStatus) {
-    return await AsyncStorage.setItem(NOTIFICATION_KEY, notificationStatus ? 'true' : 'false');
+  return await AsyncStorage.setItem(
+    NOTIFICATION_KEY,
+    notificationStatus ? 'true' : 'false',
+  );
 }
-
