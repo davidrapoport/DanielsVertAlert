@@ -4,6 +4,7 @@ const WEB_ID_KEY = '@WEB_ID_KEY';
 const RIDE_DATA_KEY = '@RIDE_DATA_KEY';
 const LAST_REFRESH_KEY = '@LAST_REFRESH_KEY';
 const VERT_GOAL_KEY = '@VERT_GOAL_KEY';
+const NOTIFICATION_KEY = '@NOTIFICATION_KEY';
 
 export async function clearAllStoredData() {
     await AsyncStorage.removeItem(WEB_ID_KEY);
@@ -48,4 +49,13 @@ export async function getVertGoal() {
 export async function storeVertGoal(vertGoal) {
     return await AsyncStorage.setItem(VERT_GOAL_KEY, "" + vertGoal);
 };
+
+export async function getNotificationStatus() {
+    const notif = await AsyncStorage.getItem(NOTIFICATION_KEY);
+    return notif === 'true';
+}
+
+export async function storeNotificationStatus(notificationStatus) {
+    return await AsyncStorage.setItem(NOTIFICATION_KEY, notificationStatus ? 'true' : 'false');
+}
 

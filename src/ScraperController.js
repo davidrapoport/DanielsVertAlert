@@ -24,13 +24,13 @@ export const shouldScrapeRides = async () => {
     // Only return true between Nov 15 and Apr 30
     if (
         currentDateAlta.getMonth() + 1 >= 11 &&
-        currentDateAlta.getDay() + 1 >= 15
+        currentDateAlta.getDay() >= 15
     ) {
         return true;
     }
     if (
         currentDateAlta.getMonth() + 1 <= 4 &&
-        currentDateAlta.getDay() + 1 <= 30
+        currentDateAlta.getDay() <= 30
     ) {
         return true;
     }

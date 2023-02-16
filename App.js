@@ -16,7 +16,7 @@ import {
 import TabNavigator from './src/views/TabNavigator';
 import WebIdEntryForm from './src/components/WebIdEntryForm';
 import FlashMessage, { showMessage } from 'react-native-flash-message';
-import { initBackgroundFetch } from './src/BackgroundProcessing';
+import { initBackgroundFetch, requestNotificationPermission } from './src/BackgroundProcessing';
 
 function App() {
   const [webId, setWebId] = React.useState();
@@ -50,6 +50,7 @@ function App() {
     };
     loadSavedData();
     initBackgroundFetch();
+    setTimeout(requestNotificationPermission, 3 * 1000);
   }, []);
 
   useEffect(() => {
