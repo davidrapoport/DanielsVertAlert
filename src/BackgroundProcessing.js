@@ -8,11 +8,11 @@ import {
   storeNotificationStatus,
   getRideData,
 } from './Storage';
-import {shouldScrapeRides} from './ScraperController';
-import {scrapeRides} from './Scraper';
+import { shouldScrapeRides } from './ScraperController';
+import { scrapeRides } from './Scraper';
 import notifee from '@notifee/react-native';
-import {Alert} from 'react-native';
-import {sortDescending} from './RideUtils';
+import { Alert } from 'react-native';
+import { sortDescending } from './RideUtils';
 
 export async function initBackgroundFetch() {
   const onEvent = async taskId => {
@@ -23,8 +23,8 @@ export async function initBackgroundFetch() {
     if (!storedWebId || !storedLastRefreshTime || !storedRides) {
       console.log(
         '[BackgroundFetch] Attempted to run background task but ' +
-          'stored data was empty ' +
-          `webId: ${storedWebId} refreshTime ${storeLastRefreshTime}`,
+        'stored data was empty ' +
+        `webId: ${storedWebId} refreshTime ${storeLastRefreshTime}`,
       );
     } else if (!(await shouldScrapeRides())) {
       console.log(
@@ -38,9 +38,9 @@ export async function initBackgroundFetch() {
         await storeRideData(rides);
         console.log(
           '[BackgroundFetch] Succeeded at ' +
-            date.toISOString() +
-            ' with ' +
-            rides,
+          date.toISOString() +
+          ' with ' +
+          rides,
         );
         if (passedDailyVertThreshold(storedRides, rides)) {
           await displayNotification(
@@ -75,6 +75,10 @@ export async function initBackgroundFetch() {
 }
 
 export function passedDailyVertThreshold(oldRides, newRides) {
+  if (!oldRides || !newRides) {
+    console.error("Got an empty rides list when checking thresholds");
+    return false;
+  }
   if (oldRides.length !== newRides.length) {
     return false;
   }
@@ -114,8 +118,8 @@ export async function requestNotificationPermission() {
   Alert.alert(
     'Turn on Vert Alerts?',
     'Would you like to turn on notifications' +
-      ' for when you hit 20k vert for the day so that you know when you can go back inside? ' +
-      'You can always turn this off later in settings.',
+    ' for when you hit 20k vert for the day so that you know when you can go back inside? ' +
+    'You can always turn this off later in settings.',
     [
       {
         text: 'No',
