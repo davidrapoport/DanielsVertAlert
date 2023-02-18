@@ -32,13 +32,16 @@ function SeasonVertProgressBar({ goalVert, ridesData, navigation }) {
     let text = "You're skiing " + Math.round(skiRatio * 100) + "% of days and averaging " +
         meanVert.toLocaleString() + " feet per day with " + daysLeft + " days left in the season.";
     if (percentMet === 1) {
-        text = "Congrats, you've met your season vert goal. Now get back to work."
+        text = "Congrats, you've met your season vert goal. You should get " +
+            Math.round(projectedVert).toLocaleString() + " feet by the end of the season. " +
+            "Now get back to work."
     } else if (projectedVert >= goalVert) {
         const vertRemaining = goalVert - seasonVert;
         const daysToSki = Math.ceil(vertRemaining / (meanVert * skiRatio));
         const projectedFinishDay = addDays(today, daysToSki);
         text += " You're projected to meet your vert goal on " +
-            projectedFinishDay.toLocaleDateString() +
+            projectedFinishDay.toLocaleDateString() + " and finish the season with " +
+            Math.round(projectedVert).toLocaleString() + " feet" +
             ". Keep up the good work!"
     } else {
         text += " At this rate, you won't meet your vert goal. You'll only get " +
