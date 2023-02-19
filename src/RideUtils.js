@@ -25,28 +25,29 @@ export const getFastestCollinsLap = ridesData => {
   const MAX_TIME_SEC = 60 * 60 * 24;
   let fastestDate = '';
   let fastestTime = MAX_TIME_SEC;
-  ridesData.forEach(({date, totalVert, rides}) => {
+  ridesData.forEach(({ date, totalVert, rides }) => {
     if (rides.length < 1) {
       return;
     }
+    rides.sort((a, b) => a.time.localeCompare(b.time));
     for (let i = 1; i < rides.length; i++) {
-      if (rides[i].lift === 'Collins' && rides[i - 1].lift === 'Collins') {
-        const time1 = new Date('1970-01-01T' + rides[i].time).getTime();
-        const time2 = new Date('1970-01-01T' + rides[i - 1].time).getTime();
-        const diff_sec = (time1 - time2) / 1000;
-        if (diff_sec < fastestTime) {
-          fastestTime = diff_sec;
-          fastestDate = date;
+      if (date === '2022-12-24')
+        if (rides[i].lift === 'Collins' && rides[i - 1].lift === 'Collins') {
+          const time1 = new Date('1970-01-01T' + rides[i].time).getTime();
+          const time2 = new Date('1970-01-01T' + rides[i - 1].time).getTime();
+          const diff_sec = (time1 - time2) / 1000;
+          if (diff_sec < fastestTime) {
+            fastestTime = diff_sec;
+            fastestDate = date;
+          }
         }
-      }
     }
   });
   if (fastestTime === MAX_TIME_SEC) {
     return null;
   }
-  const fastestTimeString = `${Math.floor(fastestTime / 60)} minutes and ${
-    fastestTime % 60
-  } seconds`;
+  const fastestTimeString = `${Math.floor(fastestTime / 60)} minutes and ${fastestTime % 60
+    } seconds`;
   return {
     fastestTime: fastestTimeString,
     fastestDate: fastestDate,
@@ -65,7 +66,7 @@ export const getBirdLaps = ridesData => {
   }
   return {
     numLaps: birdRides.length,
-    vert: birdRides.reduce((acc, {vert}) => vert + acc, 0),
+    vert: birdRides.reduce((acc, { vert }) => vert + acc, 0),
   };
 };
 
@@ -77,7 +78,7 @@ export const getBiggestDay = ridesData => {
       return -1;
     }
   });
-  return {vert: ridesData[0].totalVert, date: ridesData[0].date};
+  return { vert: ridesData[0].totalVert, date: ridesData[0].date };
 };
 
 const sortByDate = (ridesData, sortAscending) => {
@@ -195,7 +196,7 @@ export const getVertSinceMonday = ridesData => {
 };
 
 export const getMeanVert = ridesData => {
-  const seasonVert = ridesData.reduce((acc, {totalVert}) => {
+  const seasonVert = ridesData.reduce((acc, { totalVert }) => {
     return acc + totalVert;
   }, 0);
   return Math.floor(seasonVert / ridesData.length);
