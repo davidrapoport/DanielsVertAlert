@@ -4,6 +4,7 @@ import {
   View,
   RefreshControl,
   ActivityIndicator,
+  AppState,
 } from 'react-native';
 import { scrapeRides } from './src/Scraper';
 import { shouldScrapeRides } from './src/ScraperController';
@@ -34,6 +35,29 @@ function App() {
   const [vertGoal, setVertGoal] = React.useState(1e6);
   const [isRefreshing, setIsRefreshing] = React.useState(false);
   const [isLoading, setIsLoading] = React.useState(true);
+
+  useEffect(() => {
+    const handleAppStateChange = async state => {
+      if (state === 'background') {
+        return;
+      }
+      const storedLastRefreshTime = await getLastRefreshTime()
+      const storedRides = await getRideData();
+      if (!storedLastRefreshTime || !storedRides) {
+        return;
+      }
+      if (!lastRefreshTime) {
+        setLastRefreshTime(storedLastRefreshTime);
+        setRideData(storedRides);
+      }
+      if (storedLastRefreshTime > lastRefreshTime) {
+        setLastRefreshTime(storedLastRefreshTime);
+        setRideData(storedRides);
+      }
+    };
+    const subscription = AppState.addEventListener('change', handleAppStateChange);
+    return () => subscription.remove();
+  }, [lastRefreshTime, rideData]);
 
   // Load saved data from AsyncStorage onComponentDidMount.
   useEffect(() => {
