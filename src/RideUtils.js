@@ -125,6 +125,9 @@ export const getBestStreak = ridesData => {
       currentStreak = 0;
     }
   }
+  if (currentStreak > bestStreak) {
+    bestStreak = currentStreak;
+  }
   return bestStreak;
 };
 
