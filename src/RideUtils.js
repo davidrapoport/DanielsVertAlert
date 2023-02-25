@@ -112,7 +112,7 @@ export const getNumRestDays = ridesData => {
 export const getBestStreak = ridesData => {
   ridesData = sortAscending(ridesData);
   let bestStreak = 1;
-  let currentStreak = 0;
+  let currentStreak = 1;
   for (let i = 1; i < ridesData.length; i++) {
     let currentDay = new Date(ridesData[i].date);
     let lastSkiDay = new Date(ridesData[i - 1].date);
@@ -122,7 +122,7 @@ export const getBestStreak = ridesData => {
       if (currentStreak > bestStreak) {
         bestStreak = currentStreak;
       }
-      currentStreak = 0;
+      currentStreak = 1;
     }
   }
   if (currentStreak > bestStreak) {
