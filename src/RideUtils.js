@@ -31,16 +31,15 @@ export const getFastestCollinsLap = ridesData => {
     }
     rides.sort((a, b) => a.time.localeCompare(b.time));
     for (let i = 1; i < rides.length; i++) {
-      if (date === '2022-12-24')
-        if (rides[i].lift === 'Collins' && rides[i - 1].lift === 'Collins') {
-          const time1 = new Date('1970-01-01T' + rides[i].time).getTime();
-          const time2 = new Date('1970-01-01T' + rides[i - 1].time).getTime();
-          const diff_sec = (time1 - time2) / 1000;
-          if (diff_sec < fastestTime) {
-            fastestTime = diff_sec;
-            fastestDate = date;
-          }
+      if (rides[i].lift === 'Collins' && rides[i - 1].lift === 'Collins') {
+        const time1 = new Date('1970-01-01T' + rides[i].time).getTime();
+        const time2 = new Date('1970-01-01T' + rides[i - 1].time).getTime();
+        const diff_sec = (time1 - time2) / 1000;
+        if (diff_sec < fastestTime) {
+          fastestTime = diff_sec;
+          fastestDate = date;
         }
+      }
     }
   });
   if (fastestTime === MAX_TIME_SEC) {
