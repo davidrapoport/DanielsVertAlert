@@ -1,4 +1,4 @@
-import { Button, TextInput, View, Text, StyleSheet, Image, KeyboardAvoidingView } from "react-native";
+import { Button, TextInput, View, Text, StyleSheet, Image, KeyboardAvoidingView, Dimensions } from "react-native";
 
 import { useRef, useState } from "react";
 import { material } from "react-native-typography";
@@ -37,7 +37,9 @@ const WebIdEntryForm = ({ savedWebId, handleUpdateWebId }) => {
     return (
         <KeyboardAvoidingView behavior={Platform.OS === 'ios' ? 'padding' : 'height'}>
             <View style={GlobalStyles.viewContainer}>
-                <Image source={require('../img/hipDownDaniel.jpg')} style={{ width: '95%' }} />
+                {/* Height needed for iOS. Check before deleting */}
+            <Image source={require('../img/hipDownDaniel.jpg')} resizeMode="contain"
+                style={{ width: '95%', height: Dimensions.get('window').height/3 }} />
                 <Text style={GlobalStyles.h3}>Enter your Alta Web Id to get started</Text>
                 <Text style={{ paddingBottom: 12, ...material.body1, marginHorizontal: 12 }}>
                     Your Web Id can be found at the bottom of your season pass

@@ -9,7 +9,8 @@ function GoalsView({ ridesData, vertGoal, navigation }) {
         return <ActivityIndicator size={'large'} style={{ marginTop: 100 }} />;
     }
     return (
-        <ScrollView style={GlobalStyles.scrollViewContainer}>
+        <ScrollView style={GlobalStyles.scrollViewContainer} 
+        showsVerticalScrollIndicator={false}>
             <View style={{
                 alignItems: 'center',
                 justifyContent: 'center',
