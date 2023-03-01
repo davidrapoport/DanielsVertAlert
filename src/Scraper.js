@@ -1,6 +1,6 @@
 const DEBUG_WEB_ID = 'L98110TQ-GJE-UP1';
 
-import {Platform} from 'react-native';
+import { Platform } from 'react-native';
 
 import {
   isSnowBirdLift,
@@ -40,7 +40,7 @@ const getAuthCookies = async () => {
 };
 
 const getUserMetadata = async (requestHeaders, webId) => {
-  const data = {wtp: webId, productId: 0};
+  const data = { wtp: webId, productId: 0 };
   const url = 'https://shop.alta.com/axess/ride-data';
   const webIdResponse = await fetch(url, {
     method: 'POST',
@@ -53,9 +53,9 @@ const getUserMetadata = async (requestHeaders, webId) => {
     }
     throw new Error(
       'Request to alta.com failed with error ' +
-        `code ${webIdResponse.status}. ` +
-        "Maybe the server is down or you aren't connected " +
-        'to the internet?',
+      `code ${webIdResponse.status}. ` +
+      "Maybe the server is down or you aren't connected " +
+      'to the internet?',
     );
   }
   return webIdResponse;
@@ -78,7 +78,7 @@ const getCookiesFromResponseHeader = responseHeader => {
       altaSessionCookie = cookieData;
     }
   }
-  const cookies = {'X-XSRF-TOKEN': xsrfToken};
+  const cookies = { 'X-XSRF-TOKEN': xsrfToken };
   if (Platform.OS !== 'ios') {
     cookies.Cookie = xsrfCookie + '; ' + altaSessionCookie;
   }
@@ -97,29 +97,31 @@ const getRideData = async (
   requestHeaders,
 ) => {
   // TODO error handling of malformed WTP.
-  const transactions = authResponseBody.transactions[0];
-  const rideRequestBody = {
-    nposno: transactions.NPOSNO,
-    nprojno: transactions.NPROJNO,
-    nserialno: transactions.NSERIALNO,
-    szvalidfrom: transactions.SZVALIDFROM,
-  };
-  const cookies = getCookiesFromResponseHeader(authResponseHeaders);
-  Object.assign(cookies, requestHeaders);
-  const ridesResponse = await fetch('https://shop.alta.com/axess/rides', {
-    method: 'POST',
-    headers: requestHeaders,
-    body: JSON.stringify(rideRequestBody),
-  });
-  if (ridesResponse.status !== 200) {
-    console.log('rides data failed');
-    throw new Error(`Request to alta.com failed with error 
+  for (let i = authResponseBody.transactions.length - 1; i >= 0; i--) {
+    const transactions = authResponseBody.transactions[i];
+    const rideRequestBody = {
+      nposno: transactions.NPOSNO,
+      nprojno: transactions.NPROJNO,
+      nserialno: transactions.NSERIALNO,
+      szvalidfrom: transactions.SZVALIDFROM,
+    };
+    const cookies = getCookiesFromResponseHeader(authResponseHeaders);
+    Object.assign(cookies, requestHeaders);
+    const ridesResponse = await fetch('https://shop.alta.com/axess/rides', {
+      method: 'POST',
+      headers: requestHeaders,
+      body: JSON.stringify(rideRequestBody),
+    });
+    if (ridesResponse.status !== 200) {
+      continue;
+    }
+    const data = await ridesResponse.json();
+    return parseRides(data);
+  }
+  throw new Error(`Request to alta.com failed with error 
                         code ${ridesResponse.status}
                         Maybe the server is down or you aren't connected
                         to the internet?`);
-  }
-  const data = await ridesResponse.json();
-  return parseRides(data);
 };
 
 const parseRides = ridesJson => {
@@ -168,7 +170,7 @@ const filterOutSugarPass = rides => {
 };
 
 const getDaysVert = rides => {
-  return rides.reduce((acc, {vert}) => {
+  return rides.reduce((acc, { vert }) => {
     return parseInt(vert) + acc;
   }, 0);
 };
