@@ -97,7 +97,7 @@ const getRideData = async (
   requestHeaders,
 ) => {
   // TODO error handling of malformed WTP.
-  for (let i = authResponseBody.transactions.length - 1; i >= 0; i--) {
+  for (let i = 0; i < authResponseBody.transactions.length; i++) {
     const transactions = authResponseBody.transactions[i];
     const rideRequestBody = {
       nposno: transactions.NPOSNO,
