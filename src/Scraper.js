@@ -96,9 +96,14 @@ const getRideData = async (
   authResponseHeaders,
   requestHeaders,
 ) => {
-  // TODO error handling of malformed WTP.
+  let isCanyonEmp = false;
   for (let i = 0; i < authResponseBody.transactions.length; i++) {
     const transactions = authResponseBody.transactions[i];
+    if (!transactions.SZPERSTYPENAME.trim().toLowerCase().startsWith("canyon emp") &&
+      !transactions.SZPERSTYPENAME.trim().toLowerCase().startsWith("alta emp")) {
+      continue;
+    }
+    isCanyonEmp = true;
     const rideRequestBody = {
       nposno: transactions.NPOSNO,
       nprojno: transactions.NPROJNO,
@@ -118,10 +123,13 @@ const getRideData = async (
     const data = await ridesResponse.json();
     return parseRides(data);
   }
-  throw new Error(`Request to alta.com failed with error 
-                        code ${ridesResponse.status}
-                        Maybe the server is down or you aren't connected
-                        to the internet?`);
+  if (!isCanyonEmp) {
+    throw new Error('Sorry, this app is currently only available to Canyon Employees.');
+  }
+  throw new Error("Request to alta.com failed with error" +
+    ` code ${ridesResponse.status}` +
+    " Maybe the server is down or you aren't connected" +
+    " to the internet?");
 };
 
 const parseRides = ridesJson => {
