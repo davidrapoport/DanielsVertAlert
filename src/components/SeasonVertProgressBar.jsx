@@ -14,7 +14,7 @@ function SeasonVertProgressBar({ goalVert, ridesData, navigation }) {
     const seasonVert = ridesData.reduce((acc,
         { totalVert }) => { return acc + totalVert }, 0);
     // TODO: Make season agnostic.
-    const seasonEnd = new Date("2023-04-23");
+    const seasonEnd = new Date("2024-04-21");
     const today = getCurrentDateAlta();
     if (isAfter(today, seasonEnd)) {
         return (

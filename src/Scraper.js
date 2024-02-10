@@ -1,6 +1,7 @@
 const DEBUG_WEB_ID = 'L98110TQ-GJE-UP1';
 
 import { Platform } from 'react-native';
+import credentials from './credentials';
 
 import {
   isSnowBirdLift,
@@ -14,12 +15,12 @@ export async function scrapeRides(webId) {
   headers['Content-Type'] = 'application/json';
   headers.Accept = 'application/json';
   headers['X-Requested-With'] = 'XMLHttpRequest';
-  const metadataResponse = await getUserMetadata(headers, webId);
+  const headersAfterLogin = await loginUser(headers);
+  const metadataResponse = await getUserMetadata(headersAfterLogin, webId);
   const metadataResponseBody = await metadataResponse.json();
   return await getRideData(
     metadataResponseBody,
-    metadataResponse.headers,
-    headers,
+    headersAfterLogin,
   );
 }
 
@@ -38,6 +39,27 @@ const getAuthCookies = async () => {
   cookies['X-CSRF-TOKEN'] = CSRFToken;
   return cookies;
 };
+
+const loginUser = async (requestHeaders) => {
+  const data = credentials
+  const url = 'https://shop.alta.com/customer/login';
+  const loginResponse = await fetch(url, {
+    method: 'POST',
+    headers: requestHeaders,
+    body: JSON.stringify(data),
+  });
+  if (loginResponse.status !== 200) {
+    throw new Error(
+      'Request to alta.com failed with error ' +
+      `code ${loginResponse.status}. ` +
+      "Maybe the server is down or you aren't connected " +
+      'to the internet?',
+    );
+  }
+  const cookies = getCookiesFromResponseHeader(loginResponse.headers);
+  Object.assign(cookies, requestHeaders);
+  return requestHeaders;
+}
 
 const getUserMetadata = async (requestHeaders, webId) => {
   const data = { wtp: webId, productId: 0 };
@@ -93,7 +115,6 @@ const getCSRFToken = response => {
 // Also need to update to the new XSRF-TOKEN
 const getRideData = async (
   authResponseBody,
-  authResponseHeaders,
   requestHeaders,
 ) => {
   let isCanyonEmp = false;
@@ -110,8 +131,6 @@ const getRideData = async (
       nserialno: transactions.NSERIALNO,
       szvalidfrom: transactions.SZVALIDFROM,
     };
-    const cookies = getCookiesFromResponseHeader(authResponseHeaders);
-    Object.assign(cookies, requestHeaders);
     const ridesResponse = await fetch('https://shop.alta.com/axess/rides', {
       method: 'POST',
       headers: requestHeaders,
